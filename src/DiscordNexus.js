@@ -11,15 +11,9 @@ class DiscordNexus {
             intents: Object.keys(GatewayIntentBits).map((a)=>{
                 return GatewayIntentBits[a]
             }),
-            partials: [
-                Partials.User,
-                Partials.Channel,
-                Partials.GuildMember,
-                Partials.Message,
-                Partials.Reaction,
-                Partials.GuildScheduledEvent,
-                Partials.ThreadMember
-            ]
+            partials: Object.keys(Partials).map((a)=>{
+                return Partials[a]
+            }),
         })
         this.client.login(process.env.CLIENT_TOKEN)
             .then(() => {
