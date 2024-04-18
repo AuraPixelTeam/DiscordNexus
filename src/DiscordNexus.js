@@ -22,6 +22,9 @@ class DiscordNexus {
             ]
         })
         this.client.login(process.env.CLIENT_TOKEN)
+            .then(() => {
+                console.log(`Logged as ${this.client.user.username}`)
+            })
     }
 }
 
