@@ -7,25 +7,18 @@ class DiscordNexus {
 
     constructor() {
         configDotenv()
-        // TODO: clean intents, partials
         this.client = new Client({
-            intents: [
-                GatewayIntentBits.Guilds,
-                GatewayIntentBits.GuildMessages,
-                GatewayIntentBits.GuildMessageReactions,
-                GatewayIntentBits.GuildMembers,
-                GatewayIntentBits.GuildPresences,
-                GatewayIntentBits.GuildMessageTyping,
-                GatewayIntentBits.DirectMessages,
-                GatewayIntentBits.MessageContent,
-                GatewayIntentBits.GuildVoiceStates
-            ],
+            intents: Object.keys(GatewayIntentBits).map((a)=>{
+                return GatewayIntentBits[a]
+            }),
             partials: [
                 Partials.User,
                 Partials.Channel,
-                Partials.Reaction,
+                Partials.GuildMember,
                 Partials.Message,
-                Partials.GuildMember
+                Partials.Reaction,
+                Partials.GuildScheduledEvent,
+                Partials.ThreadMember
             ]
         })
         this.client.login(process.env.CLIENT_TOKEN)
