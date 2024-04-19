@@ -1,5 +1,6 @@
 import {
     existsSync,
+    readFileSync,
     writeFileSync
 } from "fs";
 import properties from "properties";
@@ -19,12 +20,27 @@ export class LocalData {
             this.data = defaultValue;
             this.save()
         } else {
-
+            const content = readFileSync(file, 'utf-8');
+            switch (this.type) {
+                case LocalDataTypes.PROPERTIES:
+                    this.data = properties.parse(content);
+                    break;
+                case LocalDataTypes.JSON:
+                    this.data = JSON.parse(content);
+                    break;
+                case LocalDataTypes.YAML:
+                    this.data = parse(content);
+                    break;
+            }
         }
     }
 
     set = (name, value) => {
         this.data[name] = value;
+    }
+
+    getAll() {
+        return this.data;
     }
 
     save = () => {

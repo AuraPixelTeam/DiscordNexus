@@ -3,20 +3,32 @@ import { configDotenv } from "dotenv";
 import {
     existsSync,
     readFileSync,
-    writeFileSync
+    writeFileSync,
+    mkdirSync,
+    readdirSync
 } from "fs";
 import { SetupWizard } from "./application/SetupWizard.js";
 import { VersionInfo } from "./VersionInfo.js";
 import path from "path";
+import { pluginLoader } from "./loader/pluginLoader.js";
+import { BaseConsole } from "./utils/BaseConsole.js";
+import { LocalData, LocalDataTypes } from "./utils/LocalData.js";
+import { PluginManager } from "./plugin/PluginManager.js";
 
 class DiscordNexus {
 
     client;
+    baseConsole;
+    configuration;
+    pluginManager;
 
     constructor() {
         global.dataPath = "./";
+        this.baseConsole = new BaseConsole();
+        this.pluginManager = new PluginManager(this);
         this.start();
 
+        this.getBaseConsole().info("Đang tải Nexus configuration")
         const DiscordNexusJSON = "nexus.yml";
         if (!existsSync(DiscordNexusJSON)) {
             const content = readFileSync(path.join(this.getDataPath(), "src", "resources", "nexus.yml"), 'utf-8');
@@ -25,10 +37,42 @@ class DiscordNexus {
             }
             writeFileSync(DiscordNexusJSON, content);
         }
+        this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
+
+        const pluginsPath = "plugins";
+        if (!existsSync(pluginsPath)) {
+            mkdirSync(pluginsPath);
+        } else {
+            const plugins = readdirSync(pluginsPath);
+            for (let dirName of plugins) {
+                const pluginDirPath = `${pluginsPath}/${dirName}`;
+                const loader = new pluginLoader(this, pluginDirPath);
+                loader.load().then(() => {
+                    const plugin = loader.getPlugin();
+                    const pluginName = plugin.getDescription().getName();
+                    const pluginVersion = plugin.getDescription().getVersion();
+
+                    this.getBaseConsole().info(`Đang bật ${pluginName} v${pluginVersion}`);
+                    this.getPluginManager().install(plugin);
+                })
+            }
+        }
     }
 
     getDataPath() {
         return dataPath;
+    }
+
+    getBaseConsole() {
+        return this.baseConsole;
+    }
+
+    getPluginManager() {
+        return this.pluginManager;
+    }
+
+    getNexusConfig() {
+        return this.configuration;
     }
 
     start = async () => {
