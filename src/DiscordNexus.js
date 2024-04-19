@@ -42,6 +42,10 @@ class DiscordNexus {
         this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
 
         const pluginsPath = "plugins";
+        const pluginDataPath = "plugin_data"
+        if (!existsSync(pluginDataPath)) {
+            mkdirSync(pluginDataPath);
+        }
         if (!existsSync(pluginsPath)) {
             mkdirSync(pluginsPath);
         } else {

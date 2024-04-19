@@ -1,5 +1,6 @@
 import {
-    existsSync
+    existsSync,
+    mkdirSync
 } from "fs";
 import { LocalData, LocalDataTypes } from "../utils/LocalData.js";
 import { VersionInfo } from "../VersionInfo.js";
@@ -43,7 +44,7 @@ export class pluginLoader {
             let mainClassName = pluginInfo["main"].split("/");
             mainClassName = mainClassName[mainClassName.length - 1];
             const mainClass = new (module[mainClassName])(this.nexus, pluginInfo);
-            
+
             if (mainClass instanceof PluginBase) {
                 this.instance = mainClass;
             } else {
@@ -56,6 +57,11 @@ export class pluginLoader {
             throw new Error(`Không thể tìm thấy mục chính của plugin ${pluginInfo["name"]}`);
         }
         this.nexus.getBaseConsole().info(`Đang tải ${pluginInfo["name"]} v${pluginInfo["version"]}`);
+
+        const pluginData = `plugin_data/${pluginInfo["name"]}`;
+        if (!existsSync(pluginData)) {
+            mkdirSync(pluginData);
+        }
         this.instance.onLoad();
     }
 

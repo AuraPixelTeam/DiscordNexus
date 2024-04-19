@@ -16,7 +16,11 @@ export class PluginBase {
 
     getDescription() {
         return this.description;
-    }   
+    }
+    
+    getResourcePath() {
+        return `plugin_data/${this.getDescription().getName()}`;
+    }
 
     onLoad() {}
 
