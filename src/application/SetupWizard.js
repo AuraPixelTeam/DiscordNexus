@@ -18,7 +18,7 @@ export class SetupWizard {
             return false;
         }
 
-        const localData = new LocalData("bot.properties", LocalDataTypes.PROPERTIES);
+        const localData = new LocalData("nexus.properties", LocalDataTypes.PROPERTIES);
         this.generateBaseSettings(localData);
         await this.botFunctions();
         await this.botProperties(localData);

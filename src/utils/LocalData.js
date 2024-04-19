@@ -3,6 +3,7 @@ import {
     writeFileSync
 } from "fs";
 import properties from "properties";
+import { parse, stringify } from 'yaml'
 
 export class LocalData {
 
@@ -32,6 +33,12 @@ export class LocalData {
             case LocalDataTypes.PROPERTIES:
                 content = properties.stringify(this.data);
                 break;
+            case LocalDataTypes.JSON:
+                content = JSON.stringify(this.data);
+                break;
+            case LocalDataTypes.YAML:
+                content = stringify(this.data);
+                break;
         }
         writeFileSync(this.file, content)
     }
@@ -39,5 +46,6 @@ export class LocalData {
 
 export const LocalDataTypes = {
     PROPERTIES: 0,
-    JSON: 1
+    JSON: 1,
+    YAML: 2
 }
