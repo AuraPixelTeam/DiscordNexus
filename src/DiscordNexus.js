@@ -14,6 +14,7 @@ import { pluginLoader } from "./loader/pluginLoader.js";
 import { BaseConsole } from "./utils/BaseConsole.js";
 import { LocalData, LocalDataTypes } from "./utils/LocalData.js";
 import { PluginManager } from "./plugin/PluginManager.js";
+import { Internet } from "./utils/Internet.js";
 
 class DiscordNexus {
 
@@ -21,6 +22,7 @@ class DiscordNexus {
     baseConsole;
     configuration;
     pluginManager;
+    nexusProperties;
 
     constructor() {
         global.dataPath = "./";
@@ -75,6 +77,14 @@ class DiscordNexus {
         return this.configuration;
     }
 
+    getNexusProperties() {
+        return this.nexusProperties;
+    }
+
+    getClient() {
+        return this.client;
+    }
+
     start = async () => {
         if (!existsSync("nexus.properties")) {
             const installer = new SetupWizard()
@@ -82,6 +92,7 @@ class DiscordNexus {
                 return;
             }
         }
+        this.nexusProperties = new LocalData("nexus.properties", LocalDataTypes.PROPERTIES);
 
         configDotenv()
 
@@ -93,6 +104,14 @@ class DiscordNexus {
                 return Partials[a]
             }),
         })
+
+        if (this.getNexusProperties().get("cron-enable")) {
+            const currentIP = await Internet.getIP();
+            const cronPort = this.getNexusProperties().get("cron-port");
+
+            this.getBaseConsole().info(`DiscordNexus cron đang được chạy trên ${currentIP}:${cronPort}`)
+        }
+
         this.client.login(process.env.CLIENT_TOKEN)
             .then(() => {
                 console.log(`Logged as ${this.client.user.username}`)
