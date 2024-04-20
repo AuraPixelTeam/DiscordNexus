@@ -15,6 +15,8 @@ import { BaseConsole } from "./utils/BaseConsole.js";
 import { LocalData, LocalDataTypes } from "./utils/LocalData.js";
 import { PluginManager } from "./plugin/PluginManager.js";
 import { Internet } from "./utils/Internet.js";
+import { Translatable } from "./lang/Translatable.js";
+import { TranslationKeys } from "./lang/TranslationKeys.js";
 
 class DiscordNexus {
 
@@ -23,46 +25,59 @@ class DiscordNexus {
     configuration;
     pluginManager;
     nexusProperties;
+    language;
+    supportLanguages = {
+        "eng": {
+            "name": "English",
+            "file": "en-US"
+        },
+        "vie": {
+            "name": "Tiếng Việt",
+            "file": "vi-VN"
+        }
+    };
 
     constructor() {
         global.dataPath = "./";
         this.baseConsole = new BaseConsole();
         this.pluginManager = new PluginManager(this);
-        this.start();
-
-        this.getBaseConsole().info("Đang tải Nexus configuration")
-        const DiscordNexusJSON = "nexus.yml";
-        if (!existsSync(DiscordNexusJSON)) {
-            const content = readFileSync(path.join(this.getDataPath(), "src", "resources", "nexus.yml"), 'utf-8');
-            if (VersionInfo.IS_DEVELOPMENT_BUILD) {
-                // TODO: Change to branch dev
+        this.start().then((OK) => {
+            if (!OK) return;
+            
+            this.getBaseConsole().info(this.language.get(TranslationKeys.NEXUS_LOADING_CONFIGURATION));
+            const DiscordNexusJSON = "nexus.yml";
+            if (!existsSync(DiscordNexusJSON)) {
+                const content = readFileSync(path.join(this.getDataPath(), "src", "resources", "nexus.yml"), 'utf-8');
+                if (VersionInfo.IS_DEVELOPMENT_BUILD) {
+                    // TODO: Change to branch dev
+                }
+                writeFileSync(DiscordNexusJSON, content);
             }
-            writeFileSync(DiscordNexusJSON, content);
-        }
-        this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
-
-        const pluginsPath = "plugins";
-        const pluginDataPath = "plugin_data"
-        if (!existsSync(pluginDataPath)) {
-            mkdirSync(pluginDataPath);
-        }
-        if (!existsSync(pluginsPath)) {
-            mkdirSync(pluginsPath);
-        } else {
-            const plugins = readdirSync(pluginsPath);
-            for (let dirName of plugins) {
-                const pluginDirPath = `${pluginsPath}/${dirName}`;
-                const loader = new pluginLoader(this, pluginDirPath);
-                loader.load().then(() => {
-                    const plugin = loader.getPlugin();
-                    const pluginName = plugin.getDescription().getName();
-                    const pluginVersion = plugin.getDescription().getVersion();
-
-                    this.getBaseConsole().info(`Đang bật ${pluginName} v${pluginVersion}`);
-                    this.getPluginManager().install(plugin);
-                })
+            this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
+    
+            const pluginsPath = "plugins";
+            const pluginDataPath = "plugin_data"
+            if (!existsSync(pluginDataPath)) {
+                mkdirSync(pluginDataPath);
             }
-        }
+            if (!existsSync(pluginsPath)) {
+                mkdirSync(pluginsPath);
+            } else {
+                const plugins = readdirSync(pluginsPath);
+                for (let dirName of plugins) {
+                    const pluginDirPath = `${pluginsPath}/${dirName}`;
+                    const loader = new pluginLoader(this, pluginDirPath);
+                    loader.load().then(() => {
+                        const plugin = loader.getPlugin();
+                        const pluginName = plugin.getDescription().getName();
+                        const pluginVersion = plugin.getDescription().getVersion();
+    
+                        this.getBaseConsole().info(Translatable.translate(this.language.get(TranslationKeys.NEXUS_PLUGIN_ENABLING), [pluginName, pluginVersion]));
+                        this.getPluginManager().install(plugin);
+                    })
+                }
+            }
+        })
     }
 
     getDataPath() {
@@ -85,18 +100,25 @@ class DiscordNexus {
         return this.nexusProperties;
     }
 
+    getLanguage() {
+        return this.language;
+    }
+
     getClient() {
         return this.client;
     }
 
     start = async () => {
         if (!existsSync("nexus.properties")) {
-            const installer = new SetupWizard()
+            const installer = new SetupWizard(this)
             if (!await installer.run()) {
-                return;
+                return false;
             }
         }
         this.nexusProperties = new LocalData("nexus.properties", LocalDataTypes.PROPERTIES);
+
+        const languageSelected = this.nexusProperties.get("language");
+        this.language = new LocalData(`./src/lang/${this.supportLanguages[languageSelected]["file"]}.yml`, LocalDataTypes.YAML);
 
         configDotenv()
 
@@ -113,13 +135,15 @@ class DiscordNexus {
             const currentIP = await Internet.getIP();
             const cronPort = this.getNexusProperties().get("cron-port");
 
-            this.getBaseConsole().info(`DiscordNexus cron đang được chạy trên ${currentIP}:${cronPort}`)
+            this.getBaseConsole().info(Translatable.translate(this.language.get(TranslationKeys.NEXUS_START_CRON_INFO), [currentIP, cronPort]))
         }
 
         this.client.login(process.env.CLIENT_TOKEN)
             .then(() => {
                 console.log(`Logged as ${this.client.user.username}`)
             })
+        
+        return true;
     }
 }
 

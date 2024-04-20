@@ -8,17 +8,58 @@ import {
 import {
     networkInterfaces
 } from 'os';
+import { Translatable } from "../lang/Translatable.js";
+import { TranslationKeys } from "../lang/TranslationKeys.js";
 
 export class SetupWizard {
 
+    nexus;
+    language;
+
+    constructor(nexus) {
+        this.nexus = nexus;
+    }
+
     run = async () => {
-        this.message("DiscordNexus setup-wizard!")
-        const value = await this.showLicense();
-        if (!value) {
-            return false;
+        this.message("DiscordNexus setup-wizard!");
+
+        supportLanguages = this.nexus.supportLanguages;
+
+        this.message("[*] Please select a language");
+        for (let language in supportLanguages) {
+            console.log(`   ${supportLanguages[language]["name"]} => ${language}`)
+        }
+
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+    
+        let languageSelected = undefined;
+        try {
+            languageSelected = (await new Promise((resolve) => {
+                rl.question('[?] Language (eng): ', resolve);
+            })).trim().toLowerCase();
+            if (!supportLanguages[languageSelected]) {
+                this.error("Couldn't find the language");
+            }
+
+            this.language = new LocalData(`./src/lang/${supportLanguages[languageSelected]["file"]}.yml`, LocalDataTypes.YAML);
+            this.message(Translatable.translate(this.language.get(TranslationKeys.NEXUS_LANGUAGE_SELECTED)));
+
+            const value = await this.showLicense();
+            if (!value) {
+                return false;
+            }
+
+        } finally {
+            rl.close();
         }
 
         const localData = new LocalData("nexus.properties", LocalDataTypes.PROPERTIES);
+        localData.set(BotProperties.LANGUAGE, languageSelected);
+        localData.save();
+
         this.generateBaseSettings(localData);
         await this.botFunctions();
         await this.botProperties(localData);
@@ -32,7 +73,7 @@ export class SetupWizard {
     }
 
     showLicense = async () => {
-        console.log(`Trước khi bắt đầu thiết lập bot Discord của mình, bạn phải chấp nhận giấy phép.\nDiscordNexus được cấp phép theo Giấy phép LGPL,\nmà bạn có thể đọc được khi mở tệp LICENSE trên thư mục này.`)
+        console.log(this.language.get(TranslationKeys.NEXUS_LICENSE_INFO))
         console.log(`
             This program is free software: you can redistribute it and/or modify
             it under the terms of the GNU Lesser General Public License as published by
@@ -47,11 +88,11 @@ export class SetupWizard {
     
         try {
             const answer = await new Promise((resolve) => {
-                rl.question('[?] Bạn có chấp nhận Giấy phép không? (y/N): ', resolve);
+                rl.question(`[?] ${this.language.get(TranslationKeys.NEXUS_QUESTION_LICENSE)}`, resolve);
             });
     
             if (answer.trim().toLowerCase() !== "y") {
-                console.error('[!] Bạn phải chấp nhận giấy phép LGPL để tiếp tục sử dụng DiscordNexus');
+                this.error(this.language.get(TranslationKeys.NEXUS_LICENSE_REQUIRED));
                 return false;
             }
             return true;
@@ -72,7 +113,7 @@ export class SetupWizard {
     
         try {
             const token = await new Promise((resolve) => {
-                rl.question('[?] Nhập TOKEN bot của bạn: ', resolve);
+                rl.question(`[?] ${this.language.get(TranslationKeys.NEXUS_INPUT_TOKEN)}`, resolve);
             });
             lines = lines.map(line => {
                 if (line.startsWith('CLIENT_TOKEN=')) {
@@ -82,7 +123,7 @@ export class SetupWizard {
             });
             
             const id = await new Promise((resolve) => {
-                rl.question('[?] Nhập ID bot của bạn: ', resolve);
+                rl.question(`[?] ${this.language.get(TranslationKeys.NEXUS_INPUT_ID)}`, resolve);
             });
             lines = lines.map(line => {
                 if (line.startsWith('CLIENT_ID=')) {
@@ -105,22 +146,22 @@ export class SetupWizard {
     
         try {
             const cron = await new Promise((resolve) => {
-                rl.question('[?] Bạn có muốn bật Cron không? (y/N): ', resolve);
+                rl.question(`[?] ${this.language.get(TranslationKeys.NEXUS_QUESTION_CRON)}`, resolve);
             });
             localData.set(BotProperties.ENABLE_CRON, (cron == "y"))
             
             if (cron == "y") {
                 const cronPort = await new Promise((resolve) => {
-                    rl.question('[?] Nhập port cho cron: ', resolve);
+                    rl.question(`[?] ${this.language.get(TranslationKeys.NEXUS_INPUT_CRON_PORT)}`, resolve);
                 });
                 const cronPortExtract = parseInt(cronPort);
                 localData.set(BotProperties.CRON_PORT, cronPortExtract)
                 localData.save();
 
-                this.message("Đang lấy IP bên ngoài của bạn");
+                this.message(this.language.get(TranslationKeys.NEXUS_LOADING_IP_GETTING));
                 const IPv4 = this.getIPv4Address();
-                this.error(`IP bên ngoài của bạn là ${IPv4}`);
-                this.error(`Bạn có thể kết nối tới cron qua ${IPv4}:${cronPort}`);
+                this.error(Translatable.translate(this.language.get(TranslationKeys.NEXUS_LOADING_IP_INFO), [IPv4]));
+                this.error(Translatable.translate(this.language.get(TranslationKeys.NEXUS_LOADING_CRON_INFO), [IPv4, cronPort]));
             }
         } finally {
             rl.close();

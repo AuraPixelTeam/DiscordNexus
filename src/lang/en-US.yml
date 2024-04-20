@@ -1,0 +1,24 @@
+nexus.language.selected: "English has been correctly selected."
+nexus.loading.configuration: 'Loading Nexus configuration'
+nexus.loading.plugin: 'Loading %0 %1'
+
+nexus.license.info: "Before setting up your Discord bot, you must accept the license.\nDiscordNexus is licensed under the LGPL License,\nwhich you can read by opening the LICENSE file in this directory."
+nexus.license.required: "You have to accept the LGPL license to continue using DiscordNexus"
+nexus.question.license: 'Do you accept the License? (y/N): '
+
+nexus.setup.input.token: "Enter your bot TOKEN: "
+nexus.setup.input.id: "Enter your bot ID: "
+
+nexus.question.cron-enable: 'Do you want to enable Cron? (y/N): '
+nexus.setup.input.cron-port: 'Enter the port for Cron: '
+
+nexus.loading.ip-getting: 'Fetching your external IP'
+nexus.loading.ip-info: 'Your external IP is %0'
+nexus.loading.cron-info: "You can connect to Cron via %0:%1"
+
+nexus.plugin.info.not-exists: 'The information "%0" does not exist in %1'
+nexus.plugin.api.error: 'Plugin %0 cannot run with Nexus %1'
+nexus.plugin.main-not-exists: 'Cannot find the main entry of plugin %0'
+nexus.plugin.enabling: 'Enabling %0 %1'
+
+nexus.start.cron-info: 'DiscordNexus cron is running on %0:%1'

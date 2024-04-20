@@ -5,6 +5,8 @@ import {
 import { LocalData, LocalDataTypes } from "../utils/LocalData.js";
 import { VersionInfo } from "../VersionInfo.js";
 import { PluginBase } from "../plugin/PluginBase.js";
+import { Translatable } from "../lang/Translatable.js";
+import { TranslationKeys } from "../lang/TranslationKeys.js";
 
 export class pluginLoader {
 
@@ -18,6 +20,7 @@ export class pluginLoader {
     }
 
     async load() {
+        const language = this.nexus.getLanguage();
         const pluginYml = this.file + "/nexus-plugin.yml";
         if (!existsSync(pluginYml)) {
             return;
@@ -29,12 +32,12 @@ export class pluginLoader {
 
         for (let type of requiredInfo) {
             if (!pluginInfo[type]) {
-                throw new Error(`Thông tin "${type}" không tồn tại trong ${pluginYml}`);
+                throw new Error(Translatable.translate(language.get(TranslationKeys.NEXUS_PLUGIN_INFO_NOT_EXISTS), [type, pluginYml]));
             }
         }
 
         if (pluginInfo["api"] !== VersionInfo.VERSION) {
-            throw new Error(`Plugin ${pluginInfo["name"]} không thể chạy với Nexus ${VersionInfo.VERSION}`);
+            throw new Error(Translatable.translate(language.get(TranslationKeys.NEXUS_PLUGIN_API_ERROR), [pluginInfo["name"], VersionInfo.VERSION]));
         }
 
         const mainPath = `${this.file}/src/${pluginInfo["main"]}.js`;
@@ -48,15 +51,15 @@ export class pluginLoader {
             if (mainClass instanceof PluginBase) {
                 this.instance = mainClass;
             } else {
-                throw new Error(`Không thể tìm thấy mục chính của plugin ${pluginInfo["name"]}`);
+                throw new Error(Translatable.translate(language.get(TranslationKeys.NEXUS_PLUGIN_MAIN_NOT_EXISTS), [pluginInfo["name"]]));
             }
         } catch (error) {
             throw new Error(error);
         }
         if (!existsSync(mainPath)) {
-            throw new Error(`Không thể tìm thấy mục chính của plugin ${pluginInfo["name"]}`);
+            throw new Error(Translatable.translate(language.get(TranslationKeys.NEXUS_PLUGIN_MAIN_NOT_EXISTS), [pluginInfo["name"]]));
         }
-        this.nexus.getBaseConsole().info(`Đang tải ${pluginInfo["name"]} v${pluginInfo["version"]}`);
+        this.nexus.getBaseConsole().info(Translatable.translate(language.get(TranslationKeys.NEXUS_LOADING_PLUGIN), [pluginInfo["name"], pluginInfo["version"]]));
 
         const pluginData = `plugin_data/${pluginInfo["name"]}`;
         if (!existsSync(pluginData)) {
