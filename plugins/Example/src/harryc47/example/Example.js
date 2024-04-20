@@ -7,6 +7,7 @@ export class Example extends PluginBase {
     }
 
     onEnable() {
-        this.saveResource("config.yml")
+        this.saveDefaultConfig();
+        console.log(this.getConfig().get("yes"))
     }
 }

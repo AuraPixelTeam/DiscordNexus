@@ -1,3 +1,4 @@
+import { LocalData, LocalDataTypes } from "../utils/LocalData.js";
 import { PluginDescription } from "./PluginDescription.js";
 import {
     existsSync,
@@ -27,6 +28,14 @@ export class PluginBase {
     
     getDataPath() {
         return `plugin_data/${this.getDescription().getName()}`;
+    }
+
+    getConfig() {
+        return new LocalData(`${this.getDataPath()}/config.yml`, LocalDataTypes.YAML);
+    }
+
+    saveDefaultConfig() {
+        this.saveResource("config.yml");
     }
 
     saveResource(fileName) {
