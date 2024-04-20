@@ -46,7 +46,7 @@ export class pluginLoader {
             const module = await import(`./../../${this.file}/src/${pluginInfo["main"]}.js`);
             let mainClassName = pluginInfo["main"].split("/");
             mainClassName = mainClassName[mainClassName.length - 1];
-            const mainClass = new (module[mainClassName])(this.nexus, pluginInfo);
+            const mainClass = new (module[mainClassName])(this.nexus, pluginInfo, this.file);
 
             if (mainClass instanceof PluginBase) {
                 this.instance = mainClass;
