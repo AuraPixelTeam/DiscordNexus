@@ -85,6 +85,10 @@ export class PluginManager {
         }
     }
 
+    registerEvent(eventName, callback) {
+        this.emitter.on(eventName, callback);
+    }
+
     disablePlugins() {
         const plugins = this.getPlugins();
         for (const pluginIndex in plugins) {
