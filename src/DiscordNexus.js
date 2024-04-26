@@ -139,6 +139,7 @@ class DiscordNexus {
     }
 
     shutdown() {
+        this.getPluginManager().disablePlugins();
         this.client.destroy();
     }
 }

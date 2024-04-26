@@ -50,4 +50,22 @@ export class PluginManager {
     getPlugin(pluginName) {
         return this.plugins[pluginName];
     }
+
+    disablePlugins() {
+        const plugins = this.getPlugins();
+        for (const pluginIndex in plugins) {
+            const plugin = plugins[pluginIndex];
+            this.nexus.getBaseConsole().info(Translatable.translate(
+                this.nexus.language.get(
+                    TranslationKeys.NEXUS_PLUGIN_DISABLING), 
+                    [
+                        plugin.getDescription().getName(),
+                        plugin.getDescription().getVersion()
+                    ]
+                )
+            );
+            plugin.onDisable();
+            this.plugins = this.plugins.splice(1, pluginIndex);
+        }
+    }
 }

@@ -12,6 +12,10 @@ export class Example extends PluginBase {
         this.test()
     }
 
+    onDisable() {
+        console.log("shutdown");
+    }
+
     async test() {
     }
 }

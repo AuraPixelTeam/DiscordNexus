@@ -50,4 +50,6 @@ export class PluginBase {
     onLoad() {}
 
     onEnable() {}
+
+    onDisable() {}
 }

@@ -19,6 +19,7 @@ nexus.loading.cron-info: "You can connect to Cron via %0:%1"
 nexus.plugin.info.not-exists: 'The information "%0" does not exist in %1'
 nexus.plugin.api.error: 'Plugin %0 cannot run with Nexus %1'
 nexus.plugin.main-not-exists: 'Cannot find the main entry of plugin %0'
-nexus.plugin.enabling: 'Enabling %0 %1'
+nexus.plugin.enabling: 'Enabling plugin %0 v%1'
+nexus.plugin.disabling: 'Disabling plugin %0 v%1'
 
 nexus.start.cron-info: 'DiscordNexus cron is running on %0:%1'

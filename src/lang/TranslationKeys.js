@@ -13,6 +13,7 @@ export const TranslationKeys = {
     NEXUS_LOADING_PLUGIN: "nexus.loading.plugin",
     NEXUS_PLUGIN_API_ERROR: "nexus.plugin.api.error",
     NEXUS_PLUGIN_ENABLING: "nexus.plugin.enabling",
+    NEXUS_PLUGIN_DISABLING: "nexus.plugin.disabling",
     NEXUS_PLUGIN_INFO_NOT_EXISTS: "nexus.plugin.info.not-exists",
     NEXUS_PLUGIN_MAIN_NOT_EXISTS: "nexus.plugin.main-not-exists",
     NEXUS_QUESTION_CRON: "nexus.question.cron-enable",

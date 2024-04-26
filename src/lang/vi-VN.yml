@@ -19,6 +19,7 @@ nexus.loading.cron-info: "Bạn có thể kết nối tới cron qua %0:%1"
 nexus.plugin.info.not-exists: 'Thông tin "%0" không tồn tại trong %1'
 nexus.plugin.api.error: 'Plugin %0 không thể chạy với Nexus %1'
 nexus.plugin.main-not-exists: 'Không thể tìm thấy mục chính của plugin %0'
-nexus.plugin.enabling: 'Đang bật %0 %1'
+nexus.plugin.enabling: 'Đang bật %0 v%1'
+nexus.plugin.disabling: 'Đang vô hiệu hóa %0 v%1'
 
 nexus.start.cron-info: 'DiscordNexus cron đang được chạy trên %0:%1'
