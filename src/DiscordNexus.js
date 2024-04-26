@@ -38,11 +38,26 @@ class DiscordNexus {
     };
 
     constructor() {
+        configDotenv()
+        this.client = new Client({
+            intents: Object.keys(GatewayIntentBits).map((a) => {
+                return GatewayIntentBits[a]
+            }),
+            partials: Object.keys(Partials).map((a) => {
+                return Partials[a]
+            }),
+        })
+
+        this.client.login(process.env.CLIENT_TOKEN)
+            .then(() => {
+                console.log(`Logged as ${this.client.user.username}`)
+            })
+
         global.dataPath = "./";
         this.baseConsole = new BaseConsole();
         this.pluginManager = new PluginManager(this);
         this.start().then((OK) => {
-            if (!OK) return;
+            if (!OK) return this.shutdown();
             
             this.getBaseConsole().info(this.language.get(TranslationKeys.NEXUS_LOADING_CONFIGURATION));
             const DiscordNexusJSON = "nexus.yml";
@@ -108,6 +123,10 @@ class DiscordNexus {
         return this.client;
     }
 
+    shutdown() {
+        this.client.destroy();
+    }
+
     start = async () => {
         if (!existsSync("nexus.properties")) {
             const installer = new SetupWizard(this)
@@ -120,28 +139,12 @@ class DiscordNexus {
         const languageSelected = this.nexusProperties.get("language");
         this.language = new LocalData(`./src/lang/${this.supportLanguages[languageSelected]["file"]}.yml`, LocalDataTypes.YAML);
 
-        configDotenv()
-
-        this.client = new Client({
-            intents: Object.keys(GatewayIntentBits).map((a) => {
-                return GatewayIntentBits[a]
-            }),
-            partials: Object.keys(Partials).map((a) => {
-                return Partials[a]
-            }),
-        })
-
         if (this.getNexusProperties().get("cron-enable")) {
             const currentIP = await Internet.getIP();
             const cronPort = this.getNexusProperties().get("cron-port");
 
             this.getBaseConsole().info(Translatable.translate(this.language.get(TranslationKeys.NEXUS_START_CRON_INFO), [currentIP, cronPort]))
         }
-
-        this.client.login(process.env.CLIENT_TOKEN)
-            .then(() => {
-                console.log(`Logged as ${this.client.user.username}`)
-            })
         
         return true;
     }

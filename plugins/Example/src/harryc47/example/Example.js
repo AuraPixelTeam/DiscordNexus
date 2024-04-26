@@ -1,4 +1,5 @@
 import { PluginBase } from "../../../../../src/plugin/PluginBase.js";
+import { ExtraChannel } from "../../../../../src/utils/ExtraChannel.js";
 
 export class Example extends PluginBase {
 
@@ -8,6 +9,9 @@ export class Example extends PluginBase {
 
     onEnable() {
         this.saveDefaultConfig();
-        console.log(this.getConfig().get("yes"))
+        this.test()
+    }
+
+    async test() {
     }
 }
