@@ -16,5 +16,13 @@ export class ConsoleReader {
 
         this.stdin.on('line', (input) => {
         });
+
+        this.stdin.on('close', () => {
+            this.close();
+        });
+    }
+
+    close() {
+        this.stdin.close();
     }
 }

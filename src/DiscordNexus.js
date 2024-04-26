@@ -17,14 +17,14 @@ import { Translatable } from "./lang/Translatable.js";
 import { TranslationKeys } from "./lang/TranslationKeys.js";
 import { ConsoleReader } from "./console/ConsoleReader.js";
 
-class DiscordNexus {
+class DiscordNexus extends Client {
 
-    client;
     baseConsole;
     configuration;
     pluginManager;
     nexusProperties;
     language;
+    
     supportLanguages = {
         "eng": {
             "name": "English",
@@ -37,19 +37,21 @@ class DiscordNexus {
     };
 
     constructor() {
-        configDotenv()
-        this.client = new Client({
+        const options = {
             intents: Object.keys(GatewayIntentBits).map((a) => {
                 return GatewayIntentBits[a]
             }),
             partials: Object.keys(Partials).map((a) => {
                 return Partials[a]
-            }),
-        })
+            })
+        };
+        super(options);
+        
+        configDotenv()
 
-        this.client.login(process.env.CLIENT_TOKEN)
+        this.login(process.env.CLIENT_TOKEN)
             .then(() => {
-                console.log(`Logged as ${this.client.user.username}`)
+                console.log(`Logged as ${this.user.username}`)
             })
 
         global.dataPath = "./";
@@ -112,10 +114,6 @@ class DiscordNexus {
         return this.language;
     }
 
-    getClient() {
-        return this.client;
-    }
-
     start = async () => {
         if (!existsSync("nexus.properties")) {
             const installer = new SetupWizard(this)
@@ -140,7 +138,7 @@ class DiscordNexus {
 
     shutdown() {
         this.getPluginManager().disablePlugins();
-        this.client.destroy();
+        this.destroy();
     }
 }
 
