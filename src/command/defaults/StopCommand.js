@@ -2,13 +2,13 @@ import { BaseInteraction, SlashCommandBuilder, User } from "discord.js";
 import { Command } from "../Command.js";
 import { ConsoleCommandSender } from "../../console/ConsoleCommandSender.js";
 
-export class Ping extends Command {
+export class StopCommand extends Command {
 
     constructor() {
         super(
             new SlashCommandBuilder()
-            .setName("ping")
-            .setDescription("ping command")
+            .setName("stop")
+            .setDescription("Stop DiscordNexus")
         )
     }
 
@@ -19,11 +19,11 @@ export class Ping extends Command {
      * @param {Object|undefined} args
      */
     execute(sender, interaction, args) {
-        if (sender instanceof ConsoleCommandSender) {
-            return sender.send({
-                content: "This cmd only use in discord!"
-            })
+        if (sender instanceof User) {
+            return interaction.reply("This cmd only use in console!")
         }
-        interaction.reply("Pong!")
+
+        sender.send("Stopping DiscordNexus...");
+        this.getNexus().shutdown();
     }
 }

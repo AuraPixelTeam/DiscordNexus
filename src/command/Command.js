@@ -1,9 +1,11 @@
 import { BaseInteraction, SlashCommandBuilder, User } from "discord.js";
 import { ConsoleCommandSender } from "../console/ConsoleCommandSender.js";
+import { DiscordNexus } from "../DiscordNexus.js";
 
 export class Command {
 
     data;
+    nexus;
 
     /**
      * @param {SlashCommandBuilder} options 
@@ -23,6 +25,20 @@ export class Command {
      * @param {Object|undefined} args
      */
     async execute(sender, interaction, args) {}
+
+    /**
+     * @returns {DiscordNexus}
+     */
+    getNexus() {
+        return this.nexus;
+    }
+
+    /**
+     * @param {DiscordNexus} nexus
+     */
+    setNexus(nexus) {
+        this.nexus = nexus;
+    }
 
     getName() {
         return this.data.name;

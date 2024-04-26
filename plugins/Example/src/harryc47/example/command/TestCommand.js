@@ -20,9 +20,7 @@ export class TestCommand extends Command {
      */
     execute(sender, interaction, args) {
         if (sender instanceof ConsoleCommandSender) {
-            return sender.send({
-                content: "This cmd only use in discord!"
-            })
+            return sender.send("This cmd only use in discord!")
         }
         interaction.reply("Test!")
     }

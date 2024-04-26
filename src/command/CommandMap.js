@@ -1,6 +1,7 @@
 import { REST, Routes } from "discord.js";
 import { Command } from "./Command.js";
-import { Ping } from "./defaults/Ping.js";
+import { StopCommand } from "./defaults/StopCommand.js";
+import { PluginsCommand } from "./defaults/PluginsCommand.js";
 
 export class CommandMap {
 
@@ -14,7 +15,8 @@ export class CommandMap {
     
     #setDefaultCommands() {
         this.registerAll([
-            new Ping()
+            new StopCommand(),
+            new PluginsCommand()
         ])
     }
 
@@ -37,6 +39,8 @@ export class CommandMap {
         if (isRegisted) {
             throw new Error(`Command "${commandName}" is registed!`);
         }
+
+        command.setNexus(this.nexus);
 
         this.knownCommands[commandName] = command;
     }
