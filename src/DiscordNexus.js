@@ -1,4 +1,4 @@
-import { Client, GatewayIntentBits, Partials } from "discord.js";
+import { Client, Events, GatewayIntentBits, Partials } from "discord.js";
 import { configDotenv } from "dotenv";
 import {
     existsSync,
@@ -53,13 +53,24 @@ export class DiscordNexus extends Client {
 
         this.login(process.env.CLIENT_TOKEN)
             .then(() => {
+                this.on(Events.InteractionCreate, async (interaction) => {
+                    if (interaction.isChatInputCommand()) {
+                        const command = this.getCommandMap().getCommand(interaction.commandName);
+            
+                        if (command) {
+                            try {
+                                await command.execute(interaction.user, interaction, interaction.options);
+                            } catch (e) {}
+                        }
+                    }
+                });
                 console.log(`Logged as ${this.user.username}`)
             })
 
         global.dataPath = "./";
         this.baseConsole = new BaseConsole();
         this.pluginManager = new PluginManager(this);
-        this.commandMap = new CommandMap();
+        this.commandMap = new CommandMap(this);
         this.start().then((OK) => {
             if (!OK) return this.shutdown();
             
@@ -84,6 +95,7 @@ export class DiscordNexus extends Client {
             } else {
                 this.getPluginManager().loadPlugins(pluginsPath);
             }
+            this.getCommandMap().registerAllForClient();
         })
 
         new ConsoleReader(this);

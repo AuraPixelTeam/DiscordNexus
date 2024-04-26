@@ -1,3 +1,4 @@
+import { DiscordNexus } from "../DiscordNexus.js";
 import { LocalData, LocalDataTypes } from "../utils/LocalData.js";
 import { PluginDescription } from "./PluginDescription.js";
 import {
@@ -18,6 +19,9 @@ export class PluginBase {
         this.file = file;
     }
 
+    /**
+     * @returns {DiscordNexus}
+     */
     getNexus() {
         return this.nexus;
     }

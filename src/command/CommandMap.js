@@ -1,5 +1,6 @@
+import { REST, Routes } from "discord.js";
 import { Command } from "./Command.js";
-import { Test } from "./defaults/Test.js";
+import { Ping } from "./defaults/Ping.js";
 
 export class CommandMap {
 
@@ -13,7 +14,7 @@ export class CommandMap {
     
     #setDefaultCommands() {
         this.registerAll([
-            new Test()
+            new Ping()
         ])
     }
 
@@ -38,6 +39,24 @@ export class CommandMap {
         }
 
         this.knownCommands[commandName] = command;
+    }
+
+    registerAllForClient() {
+        const commands = Object.values(this.getCommands()).map(cmd => cmd.toJSON());
+
+        try {
+            const rest = new REST({version: '10'}).setToken(process.env.CLIENT_TOKEN);
+            try {
+                rest.put(
+                    Routes.applicationCommands(process.env.CLIENT_ID),
+                    {body: commands},
+                )
+            } catch (e) {
+                console.log(e.message);
+            }
+        } catch (e) {
+            console.log(e.message)
+        }
     }
 
     /**

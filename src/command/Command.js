@@ -22,7 +22,7 @@ export class Command {
      * @param {BaseInteraction|undefined} interaction
      * @param {Object|undefined} args
      */
-    execute(sender, interaction, args) {}
+    async execute(sender, interaction, args) {}
 
     getName() {
         return this.data.name;
@@ -30,5 +30,9 @@ export class Command {
 
     getDescription() {
         return this.data.description;
+    }
+
+    toJSON() {
+        return this.data.toJSON();
     }
 }

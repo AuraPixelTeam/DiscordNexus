@@ -1,8 +1,8 @@
-import { BaseInteraction, SlashCommandBuilder, User } from "discord.js";
-import { Command } from "../Command.js";
-import { ConsoleCommandSender } from "../../console/ConsoleCommandSender.js";
+import { BaseInteraction, SlashCommandBuilder, User } from "discord.js"
+import { Command } from "../../../../../../src/command/Command.js"
+import { ConsoleCommandSender } from "../../../../../../src/console/ConsoleCommandSender.js"
 
-export class Test extends Command {
+export class TestCommand extends Command {
 
     constructor() {
         super(
@@ -24,5 +24,6 @@ export class Test extends Command {
                 content: "This cmd only use in discord!"
             })
         }
+        interaction.reply("Test!")
     }
 }
