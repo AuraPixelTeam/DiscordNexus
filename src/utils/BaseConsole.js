@@ -1,4 +1,3 @@
-
 export class BaseConsole {
 
     info(text) {

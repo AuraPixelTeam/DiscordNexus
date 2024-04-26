@@ -4,19 +4,18 @@ import {
     existsSync,
     readFileSync,
     writeFileSync,
-    mkdirSync,
-    readdirSync
+    mkdirSync
 } from "fs";
 import { SetupWizard } from "./application/SetupWizard.js";
 import { VersionInfo } from "./VersionInfo.js";
 import path from "path";
-import { pluginLoader } from "./loader/pluginLoader.js";
 import { BaseConsole } from "./utils/BaseConsole.js";
 import { LocalData, LocalDataTypes } from "./utils/LocalData.js";
 import { PluginManager } from "./plugin/PluginManager.js";
 import { Internet } from "./utils/Internet.js";
 import { Translatable } from "./lang/Translatable.js";
 import { TranslationKeys } from "./lang/TranslationKeys.js";
+import { ConsoleReader } from "./console/ConsoleReader.js";
 
 class DiscordNexus {
 
@@ -78,21 +77,15 @@ class DiscordNexus {
             if (!existsSync(pluginsPath)) {
                 mkdirSync(pluginsPath);
             } else {
-                const plugins = readdirSync(pluginsPath);
-                for (let dirName of plugins) {
-                    const pluginDirPath = `${pluginsPath}/${dirName}`;
-                    const loader = new pluginLoader(this, pluginDirPath);
-                    loader.load().then(() => {
-                        const plugin = loader.getPlugin();
-                        const pluginName = plugin.getDescription().getName();
-                        const pluginVersion = plugin.getDescription().getVersion();
-    
-                        this.getBaseConsole().info(Translatable.translate(this.language.get(TranslationKeys.NEXUS_PLUGIN_ENABLING), [pluginName, pluginVersion]));
-                        this.getPluginManager().install(plugin);
-                    })
-                }
+                this.getPluginManager().loadPlugins(pluginsPath);
             }
         })
+
+        new ConsoleReader();
+        process.on('SIGINT', () => {
+            this.shutdown();
+            process.exit();
+        });
     }
 
     getDataPath() {
@@ -123,10 +116,6 @@ class DiscordNexus {
         return this.client;
     }
 
-    shutdown() {
-        this.client.destroy();
-    }
-
     start = async () => {
         if (!existsSync("nexus.properties")) {
             const installer = new SetupWizard(this)
@@ -147,6 +136,10 @@ class DiscordNexus {
         }
         
         return true;
+    }
+
+    shutdown() {
+        this.client.destroy();
     }
 }
 
