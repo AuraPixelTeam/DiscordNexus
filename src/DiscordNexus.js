@@ -16,14 +16,16 @@ import { Internet } from "./utils/Internet.js";
 import { Translatable } from "./lang/Translatable.js";
 import { TranslationKeys } from "./lang/TranslationKeys.js";
 import { ConsoleReader } from "./console/ConsoleReader.js";
+import { CommandMap } from "./command/CommandMap.js";
 
-class DiscordNexus extends Client {
+export class DiscordNexus extends Client {
 
     baseConsole;
     configuration;
     pluginManager;
     nexusProperties;
     language;
+    commandMap;
     
     supportLanguages = {
         "eng": {
@@ -57,6 +59,7 @@ class DiscordNexus extends Client {
         global.dataPath = "./";
         this.baseConsole = new BaseConsole();
         this.pluginManager = new PluginManager(this);
+        this.commandMap = new CommandMap();
         this.start().then((OK) => {
             if (!OK) return this.shutdown();
             
@@ -83,7 +86,7 @@ class DiscordNexus extends Client {
             }
         })
 
-        new ConsoleReader();
+        new ConsoleReader(this);
         process.on('SIGINT', () => {
             this.shutdown();
             process.exit();
@@ -94,24 +97,43 @@ class DiscordNexus extends Client {
         return dataPath;
     }
 
+    /**
+     * @returns {BaseConsole}
+     */
     getBaseConsole() {
         return this.baseConsole;
     }
 
+    /**
+     * @returns {PluginManager}
+     */
     getPluginManager() {
         return this.pluginManager;
     }
 
+    /**
+     * @returns {LocalData}
+     */
     getNexusConfig() {
         return this.configuration;
     }
 
+    /**
+     * @returns {LocalData}
+     */
     getNexusProperties() {
         return this.nexusProperties;
     }
 
     getLanguage() {
         return this.language;
+    }
+
+    /**
+     * @returns {CommandMap}
+     */
+    getCommandMap() {
+        return this.commandMap;
     }
 
     start = async () => {
