@@ -1,18 +1,25 @@
+import EventEmitter from "events";
 import { Translatable } from "../lang/Translatable.js";
 import { TranslationKeys } from "../lang/TranslationKeys.js";
 import { pluginLoader } from "../loader/pluginLoader.js";
 import {
     readdirSync
 } from "fs";
+import { Events } from "../events/Events.js";
+import { Event } from "../events/Event.js";
+import { Listener } from "../events/Listener.js";
+import { PluginEnableEvent } from "../events/plugin/PluginEnableEvent.js";
 
 export class PluginManager {
 
     nexus;
     plugins;
+    emitter;
 
     constructor(nexus) {
         this.nexus = nexus;
         this.plugins = [];
+        this.emitter = new EventEmitter();
     }
 
     install(plugin) {
@@ -39,6 +46,7 @@ export class PluginManager {
 
                 this.nexus.getBaseConsole().info(Translatable.translate(language.get(TranslationKeys.NEXUS_PLUGIN_ENABLING), [pluginName, pluginVersion]));
                 this.install(plugin);
+                this.onEvent(new PluginEnableEvent(plugin));
             })
         }
     }
@@ -49,6 +57,28 @@ export class PluginManager {
 
     getPlugin(pluginName) {
         return this.plugins[pluginName];
+    }
+
+    /**
+     * @param {Event} event 
+     */
+    onEvent(event) {
+        this.emitter.emit(event.getEventName(), event);
+    }
+
+    registerEvents(listener) {
+        if (listener instanceof Listener) {
+            for (const event in Events) {
+                const eventName = Events[event];
+                if (typeof listener[eventName] === 'function') {
+                    this.emitter.on(eventName, (...args) => {
+                        listener[eventName](...args);
+                    });
+                }
+            }
+        } else {
+            throw new Error(`${listener.constructor.name} must be Listener`);
+        }
     }
 
     disablePlugins() {
