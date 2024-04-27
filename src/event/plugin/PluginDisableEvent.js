@@ -1,9 +1,9 @@
 import { Events } from "../Events.js";
 import { PluginEvent } from "./PluginEvent.js";
 
-export class PluginEnableEvent extends PluginEvent {
+export class PluginDisableEvent extends PluginEvent {
 
     constructor(plugin) {
-        super(Events.PLUGIN_ENABLE_EVENT, plugin);
+        super(Events.PLUGIN_DISABLE_EVENT, plugin);
     }
 }

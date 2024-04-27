@@ -7,6 +7,7 @@ import { Events } from "../event/Events.js";
 import { Event } from "../event/Event.js";
 import { Listener } from "../event/Listener.js";
 import { PluginEnableEvent } from "../event/plugin/PluginEnableEvent.js";
+import { PluginDisableEvent } from "../event/plugin/PluginDisableEvent.js";
 
 export class PluginManager {
     nexus;
@@ -49,8 +50,8 @@ export class PluginManager {
                             [pluginName, pluginVersion]
                         )
                     );
-                this.install(plugin);
                 this.callEvent(new PluginEnableEvent(plugin));
+                this.install(plugin);
             });
         }
     }
@@ -106,6 +107,7 @@ export class PluginManager {
                         ]
                     )
                 );
+            this.callEvent(new PluginDisableEvent(plugin));
             plugin.onDisable();
             this.plugins = this.plugins.splice(1, pluginIndex);
         }

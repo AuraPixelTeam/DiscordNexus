@@ -5,7 +5,7 @@ export class EventListener extends Listener {
     /**
      * @param {PluginEnableEvent} event
      */
-    PluginEnableEvent(event) {
+    pluginDisable(event) {
         const plugin = event.getPlugin();
     }
 }
