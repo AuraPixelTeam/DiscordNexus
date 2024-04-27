@@ -1,3 +1,6 @@
 node_modules
 .env
 nexus.properties
+nexus.yml
+plugins
+plugin_data

@@ -36,9 +36,19 @@ export class pluginLoader {
             }
         }
 
-        if (pluginInfo["api"] !== VersionInfo.VERSION) {
-            throw new Error(Translatable.translate(language.get(TranslationKeys.NEXUS_PLUGIN_API_ERROR), [pluginInfo["name"], VersionInfo.VERSION]));
+        switch(typeof pluginInfo["api"]) {
+            case 'string':
+                if (pluginInfo["api"] !== VersionInfo.VERSION) {
+                    throw new Error(Translatable.translate(language.get(TranslationKeys.NEXUS_PLUGIN_API_ERROR), [pluginInfo["name"], VersionInfo.VERSION]));
+                }
+                break;
+            case 'object':
+                if (!pluginInfo["api"].includes(VersionInfo.VERSION)) {
+                    throw new Error(Translatable.translate(language.get(TranslationKeys.NEXUS_PLUGIN_API_ERROR), [pluginInfo["name"], VersionInfo.VERSION]));
+                }
+                break;
         }
+        
 
         const mainPath = `${this.file}/src/${pluginInfo["main"]}.js`;
         // TODO: clean path
