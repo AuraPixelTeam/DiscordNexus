@@ -50,7 +50,7 @@ export class PluginManager {
                         )
                     );
                 this.install(plugin);
-                this.onEvent(new PluginEnableEvent(plugin));
+                this.callEvent(new PluginEnableEvent(plugin));
             });
         }
     }
@@ -66,7 +66,7 @@ export class PluginManager {
     /**
      * @param {Event} event
      */
-    onEvent(event) {
+    callEvent(event) {
         this.emitter.emit(event.getEventName(), event);
     }
 
