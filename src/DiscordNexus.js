@@ -19,7 +19,7 @@ import { ConsoleReader } from "./console/ConsoleReader.js";
 import { CommandMap } from "./command/CommandMap.js";
 import { Language } from "./lang/Language.js";
 
-global.LANGUAGE_PATH = "./src/lang";
+global.LANGUAGE_PATH = "./src/lang/defaults";
 
 export class DiscordNexus extends Client {
 
