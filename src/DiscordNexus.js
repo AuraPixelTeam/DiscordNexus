@@ -20,7 +20,6 @@ import { CommandMap } from "./command/CommandMap.js";
 
 export class DiscordNexus extends Client {
 
-    static instance;
     baseConsole;
     configuration;
     pluginManager;
@@ -150,9 +149,7 @@ export class DiscordNexus extends Client {
         return this.commandMap;
     }
 
-    static getInstance() {
-        return this.instance;
-    }
+    
 
     start = async () => {
         if (!existsSync("nexus.properties")) {
