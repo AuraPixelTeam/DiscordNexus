@@ -18,6 +18,8 @@ import { TranslationKeys } from "./lang/TranslationKeys.js";
 import { ConsoleReader } from "./console/ConsoleReader.js";
 import { CommandMap } from "./command/CommandMap.js";
 import { Language } from "./lang/Language.js";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 global.LANGUAGE_PATH = "./src/lang/defaults";
 
@@ -43,7 +45,9 @@ export class DiscordNexus extends Client {
         
         configDotenv()
 
-        global.dataPath = "./";
+        const currentFilePath = fileURLToPath(import.meta.url);
+        const currentDirPath = dirname(currentFilePath);
+        global.dataPath = currentDirPath;
         this.instance = this;
         this.baseConsole = new BaseConsole();
         this.pluginManager = new PluginManager(this);
@@ -72,9 +76,6 @@ export class DiscordNexus extends Client {
             const DiscordNexusJSON = "nexus.yml";
             if (!existsSync(DiscordNexusJSON)) {
                 const content = readFileSync(path.join(this.getDataPath(), "src", "resources", "nexus.yml"), 'utf-8');
-                if (VersionInfo.IS_DEVELOPMENT_BUILD) {
-                    // TODO: Change to branch dev
-                }
                 writeFileSync(DiscordNexusJSON, content);
             }
             this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
@@ -92,6 +93,9 @@ export class DiscordNexus extends Client {
             this.getCommandMap().registerAllForClient();
             
             new ConsoleReader(this);
+            if (VersionInfo.IS_DEVELOPMENT_BUILD) {
+                this.getBaseConsole().warn(this.getLanguage().get(TranslationKeys.NEXUS_DEVBUILD));
+            }
         })
 
         process.on('SIGINT', () => {
@@ -174,5 +178,6 @@ export class DiscordNexus extends Client {
         process.kill(process.pid, 'SIGINT');
     }
 }
+
 
 new DiscordNexus()

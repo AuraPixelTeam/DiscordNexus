@@ -1,3 +1,5 @@
+import { TextFormat } from "./TextFormat.js";
+
 export class BaseConsole {
 
     info(text) {
@@ -6,6 +8,10 @@ export class BaseConsole {
 
     error(text) {
         this.log("ERROR", text);
+    }
+
+    warn(text) {
+        this.log("WARNING", TextFormat.format(text, TextFormat.colors.yellow));
     }
 
     log(type, text) {
