@@ -43,22 +43,6 @@ export class DiscordNexus extends Client {
         
         configDotenv()
 
-        this.login(process.env.CLIENT_TOKEN)
-            .then(() => {
-                this.on(Events.InteractionCreate, async (interaction) => {
-                    if (interaction.isChatInputCommand()) {
-                        const command = this.getCommandMap().getCommand(interaction.commandName);
-            
-                        if (command) {
-                            try {
-                                await command.execute(interaction.user, interaction, interaction.options);
-                            } catch (e) {}
-                        }
-                    }
-                });
-                console.log(`Logged as ${this.user.username}`)
-            })
-
         global.dataPath = "./";
         this.instance = this;
         this.baseConsole = new BaseConsole();
@@ -68,6 +52,23 @@ export class DiscordNexus extends Client {
             if (!OK) return this.shutdown();
             
             this.getBaseConsole().info(this.language.get(TranslationKeys.NEXUS_LOADING_CONFIGURATION));
+
+            this.login(process.env.CLIENT_TOKEN)
+                .then(() => {
+                    this.on(Events.InteractionCreate, async (interaction) => {
+                        if (interaction.isChatInputCommand()) {
+                            const command = this.getCommandMap().getCommand(interaction.commandName);
+                
+                            if (command) {
+                                try {
+                                    await command.execute(interaction.user, interaction, interaction.options);
+                                } catch (e) {}
+                            }
+                        }
+                    });
+                    console.log(`Logged as ${this.user.username}`)
+                })
+
             const DiscordNexusJSON = "nexus.yml";
             if (!existsSync(DiscordNexusJSON)) {
                 const content = readFileSync(path.join(this.getDataPath(), "src", "resources", "nexus.yml"), 'utf-8');
@@ -89,9 +90,10 @@ export class DiscordNexus extends Client {
                 this.getPluginManager().loadPlugins(pluginsPath);
             }
             this.getCommandMap().registerAllForClient();
+            
+            new ConsoleReader(this);
         })
 
-        new ConsoleReader(this);
         process.on('SIGINT', () => {
             this.shutdown();
             process.exit();

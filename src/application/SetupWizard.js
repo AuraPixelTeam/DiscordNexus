@@ -27,7 +27,7 @@ export class SetupWizard {
         const supportLanguages = Language.getLanguages();
 
         this.message("[*] Please select a language");
-        for (let language of supportLanguages) {
+        for (let language in supportLanguages) {
             console.log(`   ${language} => ${supportLanguages[language]}`)
         }
 
