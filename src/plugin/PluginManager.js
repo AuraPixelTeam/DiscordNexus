@@ -45,9 +45,11 @@ export class PluginManager {
                 this.nexus
                     .getBaseConsole()
                     .info(
-                        Translatable.translate(
-                            language.get(TranslationKeys.NEXUS_PLUGIN_ENABLING),
-                            [pluginName, pluginVersion]
+                        language.translate(
+                            new Translatable(
+                                TranslationKeys.NEXUS_PLUGIN_ENABLING,
+                                [pluginName, pluginVersion]
+                            )
                         )
                     );
                 this.callEvent(new PluginEnableEvent(plugin));
@@ -97,15 +99,15 @@ export class PluginManager {
             this.nexus
                 .getBaseConsole()
                 .info(
-                    Translatable.translate(
-                        this.nexus.language.get(
-                            TranslationKeys.NEXUS_PLUGIN_DISABLING
-                        ),
-                        [
-                            plugin.getDescription().getName(),
-                            plugin.getDescription().getVersion(),
-                        ]
-                    )
+                   this.nexus.language.translate(
+                        new Translatable(
+                            TranslationKeys.NEXUS_PLUGIN_DISABLING,
+                            [
+                                plugin.getDescription().getName(),
+                                plugin.getDescription().getVersion(),
+                            ]
+                        )
+                   )
                 );
             this.callEvent(new PluginDisableEvent(plugin));
             plugin.onDisable();

@@ -10,6 +10,7 @@ import {
 } from 'os';
 import { Translatable } from "../lang/Translatable.js";
 import { TranslationKeys } from "../lang/TranslationKeys.js";
+import { Language } from "../lang/Language.js";
 
 export class SetupWizard {
 
@@ -23,11 +24,11 @@ export class SetupWizard {
     run = async () => {
         this.message("DiscordNexus setup-wizard!");
 
-        supportLanguages = this.nexus.supportLanguages;
+        const supportLanguages = Language.getLanguages();
 
         this.message("[*] Please select a language");
-        for (let language in supportLanguages) {
-            console.log(`   ${supportLanguages[language]["name"]} => ${language}`)
+        for (let language of supportLanguages) {
+            console.log(`   ${language} => ${supportLanguages[language]}`)
         }
 
         const rl = readline.createInterface({
@@ -44,8 +45,8 @@ export class SetupWizard {
                 this.error("Couldn't find the language");
             }
 
-            this.language = new LocalData(`./src/lang/${supportLanguages[languageSelected]["file"]}.yml`, LocalDataTypes.YAML);
-            this.message(Translatable.translate(this.language.get(TranslationKeys.NEXUS_LANGUAGE_SELECTED)));
+            this.language = new Language(languageSelected);
+            this.message(this.language.get(TranslationKeys.NEXUS_LANGUAGE_SELECTED));
 
             const value = await this.showLicense();
             if (!value) {
@@ -160,8 +161,8 @@ export class SetupWizard {
 
                 this.message(this.language.get(TranslationKeys.NEXUS_LOADING_IP_GETTING));
                 const IPv4 = this.getIPv4Address();
-                this.error(Translatable.translate(this.language.get(TranslationKeys.NEXUS_LOADING_IP_INFO), [IPv4]));
-                this.error(Translatable.translate(this.language.get(TranslationKeys.NEXUS_LOADING_CRON_INFO), [IPv4, cronPort]));
+                this.error(this.language.translate(new Translatable(TranslationKeys.NEXUS_LOADING_IP_INFO, [IPv4])))
+                this.error(this.language.translate(new Translatable(TranslationKeys.NEXUS_LOADING_CRON_INFO, [IPv4, cronPort])))
             }
         } finally {
             rl.close();

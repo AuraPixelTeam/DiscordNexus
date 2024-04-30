@@ -1,11 +1,18 @@
 
 export class Translatable {
 
-    static translate(text, args = []) {
-        for (let key in args) {
-            const value = args[key];
-            text = text.replace(`%${key}`, value);
-        }
-        return text;
+    text;
+    params;
+    constructor(text, params) {
+        this.text = text;
+        this.params = params;
+    }
+
+    getText() {
+        return this.text;
+    }
+
+    getParams() {
+        return this.params;
     }
 }

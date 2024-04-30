@@ -1,5 +1,6 @@
 
 export const TranslationKeys = {
+    NEXUS_LANGUAGE_NAME: "nexus.language.name",
     NEXUS_INPUT_CRON_PORT: "nexus.setup.input.cron-port",
     NEXUS_INPUT_ID: "nexus.setup.input.id",
     NEXUS_INPUT_TOKEN: "nexus.setup.input.token",

@@ -17,6 +17,9 @@ import { Translatable } from "./lang/Translatable.js";
 import { TranslationKeys } from "./lang/TranslationKeys.js";
 import { ConsoleReader } from "./console/ConsoleReader.js";
 import { CommandMap } from "./command/CommandMap.js";
+import { Language } from "./lang/Language.js";
+
+global.LANGUAGE_PATH = "./src/lang";
 
 export class DiscordNexus extends Client {
 
@@ -26,17 +29,6 @@ export class DiscordNexus extends Client {
     nexusProperties;
     language;
     commandMap;
-    
-    supportLanguages = {
-        "eng": {
-            "name": "English",
-            "file": "en-US"
-        },
-        "vie": {
-            "name": "Tiếng Việt",
-            "file": "vi-VN"
-        }
-    };
 
     constructor() {
         const options = {
@@ -138,6 +130,9 @@ export class DiscordNexus extends Client {
         return this.nexusProperties;
     }
 
+    /**
+     * @returns {Language}
+     */
     getLanguage() {
         return this.language;
     }
@@ -149,8 +144,6 @@ export class DiscordNexus extends Client {
         return this.commandMap;
     }
 
-    
-
     start = async () => {
         if (!existsSync("nexus.properties")) {
             const installer = new SetupWizard(this)
@@ -161,13 +154,13 @@ export class DiscordNexus extends Client {
         this.nexusProperties = new LocalData("nexus.properties", LocalDataTypes.PROPERTIES);
 
         const languageSelected = this.nexusProperties.get("language");
-        this.language = new LocalData(`./src/lang/${this.supportLanguages[languageSelected]["file"]}.yml`, LocalDataTypes.YAML);
+        this.language = new Language(languageSelected);
 
         if (this.getNexusProperties().get("cron-enable")) {
             const currentIP = await Internet.getIP();
             const cronPort = this.getNexusProperties().get("cron-port");
 
-            this.getBaseConsole().info(Translatable.translate(this.language.get(TranslationKeys.NEXUS_START_CRON_INFO), [currentIP, cronPort]))
+            this.getBaseConsole().info(this.getLanguage().translate(new Translatable(TranslationKeys.NEXUS_START_CRON_INFO, [currentIP, cronPort])))
         }
         
         return true;
