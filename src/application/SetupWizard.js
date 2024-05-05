@@ -113,22 +113,22 @@ export class SetupWizard {
         });
     
         try {
-            const token = await new Promise((resolve) => {
-                rl.question(`[?] ${this.language.get(TranslationKeys.NEXUS_INPUT_TOKEN)}`, resolve);
-            });
-            lines = lines.map(line => {
-                if (line.startsWith('CLIENT_TOKEN=')) {
-                    return `CLIENT_TOKEN=${token}`;
-                }
-                return line;
-            });
-            
             const id = await new Promise((resolve) => {
                 rl.question(`[?] ${this.language.get(TranslationKeys.NEXUS_INPUT_ID)}`, resolve);
             });
             lines = lines.map(line => {
                 if (line.startsWith('CLIENT_ID=')) {
                     return `CLIENT_ID=${id}`;
+                }
+                return line;
+            });
+            
+            const token = await new Promise((resolve) => {
+                rl.question(`[?] ${this.language.get(TranslationKeys.NEXUS_INPUT_TOKEN)}`, resolve);
+            });
+            lines = lines.map(line => {
+                if (line.startsWith('CLIENT_TOKEN=')) {
+                    return `CLIENT_TOKEN=${token}`;
                 }
                 return line;
             });
