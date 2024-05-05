@@ -28,7 +28,7 @@ export class SetupWizard {
 
         this.message("[*] Please select a language");
         for (let language in supportLanguages) {
-            console.log(`   ${language} => ${supportLanguages[language]}`)
+            console.log(`   ${supportLanguages[language]} => ${language}`)
         }
 
         const rl = readline.createInterface({
@@ -122,7 +122,7 @@ export class SetupWizard {
                 }
                 return line;
             });
-            
+
             const token = await new Promise((resolve) => {
                 rl.question(`[?] ${this.language.get(TranslationKeys.NEXUS_INPUT_TOKEN)}`, resolve);
             });
