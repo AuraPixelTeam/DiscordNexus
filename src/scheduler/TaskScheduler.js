@@ -8,23 +8,15 @@ export class TaskScheduler {
     }
 
     scheduleDelayedTask(task, delay) {
-        this.#addTask(task, delay, -1);
+        this.#addTask(task, delay, false);
     }
 
     scheduleDelayedRepeatingTask(task, delay) {
-        this.#addTask(task, delay, 1);
+        this.#addTask(task, delay, true);
     }
 
-    #addTask(task, delay, priod) {
-        if (delay <= 0) delay = -1;
-
-        if (priod <= -1) {
-            priod = -1;
-        } else if (priod < 1) {
-            priod = 1;
-        }
-
-        this.#handle(new TaskHandler(task, delay, priod));
+    #addTask(task, delay, isRepeating) {
+        this.#handle(new TaskHandler(task, delay, isRepeating, this.owner));
     }
 
     /**

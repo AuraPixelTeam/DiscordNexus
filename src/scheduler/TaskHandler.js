@@ -6,7 +6,7 @@ export class TaskHandler {
 
     cancelled = false;
     delay = -1;
-    priod = -1;
+    repeating = false;
     owner = undefined;
     /**
      * 
@@ -15,11 +15,11 @@ export class TaskHandler {
      * @param {int} priod 
      * @param {PluginBase|undefined} owner
      */
-    constructor(task, delay, priod, owner) {
+    constructor(task, delay, isRepeating, owner) {
         this.task = task;
         this.delay = delay;
-        this.priod = priod;
-        this.owner = owner
+        this.repeating = isRepeating;
+        this.owner = owner;
     }
 
     isCancelled() {
@@ -31,13 +31,6 @@ export class TaskHandler {
      */
     getDelay() {
         return this.delay;
-    }
-
-    /**
-     * @return {int}
-     */
-    getPriod() {
-        return this.priod;
     }
     
     getOwner() {
@@ -55,7 +48,7 @@ export class TaskHandler {
      * @returns {boolean}
      */
     isRepeating() {
-        return this.priod > 0;
+        return this.isRepeating;
     }
 
     cancel() {
