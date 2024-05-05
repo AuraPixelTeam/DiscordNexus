@@ -2,6 +2,7 @@ import { REST, Routes } from "discord.js";
 import { Command } from "./Command.js";
 import { StopCommand } from "./defaults/StopCommand.js";
 import { PluginsCommand } from "./defaults/PluginsCommand.js";
+import { VersionCommand } from "./defaults/VersionCommand.js";
 
 export class CommandMap {
 
@@ -16,7 +17,8 @@ export class CommandMap {
     #setDefaultCommands() {
         this.registerAll([
             new StopCommand(),
-            new PluginsCommand()
+            new PluginsCommand(),
+            new VersionCommand()
         ])
     }
 

@@ -20,5 +20,8 @@ export const TranslationKeys = {
     NEXUS_PLUGIN_MAIN_NOT_EXISTS: "nexus.plugin.main-not-exists",
     NEXUS_QUESTION_CRON: "nexus.question.cron-enable",
     NEXUS_QUESTION_LICENSE: "nexus.question.license",
-    NEXUS_START_CRON_INFO: "nexus.start.cron-info"
+    NEXUS_START_CRON_INFO: "nexus.start.cron-info",
+    NEXUS_VERSION_INFO: "nexus.version.info",
+    NEXUS_NODE_INFO: "nexus.node.info",
+    NEXUS_PLATFORM_INFO: "nexus.platform.info"
 };
