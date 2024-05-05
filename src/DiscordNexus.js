@@ -50,7 +50,6 @@ export class DiscordNexus extends Client {
         const currentFilePath = fileURLToPath(import.meta.url);
         const currentDirPath = dirname(currentFilePath);
         global.dataPath = currentDirPath;
-        this.instance = this;
         this.baseConsole = new BaseConsole();
         this.pluginManager = new PluginManager(this);
         this.commandMap = new CommandMap(this);
