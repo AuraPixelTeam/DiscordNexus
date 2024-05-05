@@ -18,9 +18,11 @@ jobs:
 
       - uses: "marvinpinto/action-automatic-releases@latest"
         with:
-          repo_token: "${{ secrets.SECRET_TOKEN }}"
+          repo_token: "${{ secrets.GITHUB_TOKEN }}"
           prerelease: false
           title: "DiscordNexus ${{ github.ref_name }}"
           files: |
-            LICENSE.txt
+            SECURITY.md
+            LICENSE
             start.cmd
+            README.md
