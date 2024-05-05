@@ -70,7 +70,11 @@ export class TaskHandler {
 
     remove() {
         this.cancelled = true;
-        clearInterval(this.task.getTaskId());
+        if (this.isDelayed() && !this.isRepeating()) {
+            clearTimeout(this.task.getTaskId());
+        } else {
+            clearInterval(this.task.getTaskId());
+        }
     }
 
     run() {
