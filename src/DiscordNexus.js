@@ -20,6 +20,7 @@ import { CommandMap } from "./command/CommandMap.js";
 import { Language } from "./lang/Language.js";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { TaskScheduler } from "./scheduler/TaskScheduler.js";
 
 global.LANGUAGE_PATH = "./src/lang/defaults";
 
@@ -31,6 +32,7 @@ export class DiscordNexus extends Client {
     nexusProperties;
     language;
     commandMap;
+    taskScheduler;
 
     constructor() {
         const options = {
@@ -52,6 +54,7 @@ export class DiscordNexus extends Client {
         this.baseConsole = new BaseConsole();
         this.pluginManager = new PluginManager(this);
         this.commandMap = new CommandMap(this);
+        this.taskScheduler = new TaskScheduler();
         this.start().then((OK) => {
             if (!OK) return this.shutdown();
             
@@ -148,6 +151,13 @@ export class DiscordNexus extends Client {
      */
     getCommandMap() {
         return this.commandMap;
+    }
+
+    /**
+     * @returns {TaskScheduler}
+     */
+    getScheduler() {
+        return this.taskScheduler;
     }
 
     start = async () => {
