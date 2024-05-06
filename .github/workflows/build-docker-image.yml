@@ -1,9 +1,9 @@
 name: Docker Image CI
 
 on:
-  release:
-    types:
-      - published
+  push:
+  pull_request:
+  workflow_dispatch:
 
 jobs:
   docker:
@@ -30,9 +30,9 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v5.3.0
         with:
           push: true
           tags: |
-            harryitz/discordnexus:${{ github.ref_name }}
-            ghcr.io/harryitz/discordnexus:${{ github.ref_name }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/discordnexus:${{ github.ref_name }}
+            ghcr.io/${{ github.repository }}
