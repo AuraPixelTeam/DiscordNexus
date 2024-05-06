@@ -1,4 +1,5 @@
 import { DiscordNexus } from "../DiscordNexus.js";
+import { TaskScheduler } from "../scheduler/TaskScheduler.js";
 import { LocalData, LocalDataTypes } from "../utils/LocalData.js";
 import { PluginDescription } from "./PluginDescription.js";
 import {
@@ -12,11 +13,13 @@ export class PluginBase {
     nexus;
     description;
     file;
+    taskScheduler;
 
     constructor(nexus, description, file) {
         this.nexus = nexus;
         this.description = new PluginDescription(description);
         this.file = file;
+        this.taskScheduler = new TaskScheduler(this);
     }
 
     /**
@@ -49,6 +52,13 @@ export class PluginBase {
             content = readFileSync(`${resourcePath}`, 'utf-8');
         }
         writeFileSync(`${this.getDataPath()}/${fileName}`, content)
+    }
+
+    /**
+     * @returns {TaskScheduler}
+     */
+    getScheduler() {
+        return this.taskScheduler;
     }
 
     onLoad() {}
