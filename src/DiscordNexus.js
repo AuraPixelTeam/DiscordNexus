@@ -12,7 +12,6 @@ import path from "path";
 import { BaseConsole } from "./utils/BaseConsole.js";
 import { LocalData, LocalDataTypes } from "./utils/LocalData.js";
 import { PluginManager } from "./plugin/PluginManager.js";
-import { Internet } from "./utils/Internet.js";
 import { Translatable } from "./lang/Translatable.js";
 import { TranslationKeys } from "./lang/TranslationKeys.js";
 import { ConsoleReader } from "./console/ConsoleReader.js";
@@ -23,6 +22,7 @@ import { dirname } from 'path';
 import { MemoryManager } from "./MemoryManager.js";
 import { TextFormat } from "./utils/TextFormat.js";
 import { CLI } from "./utils/CLI.js";
+import { Network } from "./network/Network.js";
 
 global.LANGUAGE_PATH = "./src/lang/defaults";
 
@@ -35,6 +35,7 @@ export class DiscordNexus extends Client {
     language;
     commandMap;
     memoryManager;
+    network;
 
     constructor() {
         const options = {
@@ -167,6 +168,13 @@ export class DiscordNexus extends Client {
         return this.memoryManager;
     }
 
+    /**
+     * @returns {Network}
+     */
+    getNetwork() {
+        return this.network;
+    }
+
     start = async () => {
         if (!existsSync("nexus.properties")) {
             const installer = new SetupWizard(this)
@@ -180,10 +188,7 @@ export class DiscordNexus extends Client {
         this.language = new Language(languageSelected);
 
         if (this.getNexusProperties().get("cron-enable")) {
-            const currentIP = await Internet.getIP();
-            const cronPort = this.getNexusProperties().get("cron-port");
-
-            this.getBaseConsole().info(this.getLanguage().translate(new Translatable(TranslationKeys.NEXUS_START_CRON_INFO, [currentIP, cronPort])))
+            this.network = new Network(this);
         }
         
         return true;
