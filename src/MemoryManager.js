@@ -21,9 +21,7 @@ export class MemoryManager {
     #init(nexusConfig) {
         this.memoryLimit = nexusConfig.getNested(NexusPropertiesConstants.MEMORY_LIMIT);
         
-        if (this.memoryLimit <= 0) {
-            Process.setMemoryLimit(-1);
-        } else {
+        if (this.memoryLimit > 0) {
             Process.setMemoryLimit(this.memoryLimit);
         }
     }
