@@ -34,5 +34,5 @@ jobs:
         with:
           push: true
           tags: |
-            DiscordNexus:${{ github.ref_name }}
-            ghcr.io/DiscordNexus:${{ github.ref_name }}
+            discordnexus:${{ github.ref_name }}
+            ghcr.io/discordnexus:${{ github.ref_name }}
