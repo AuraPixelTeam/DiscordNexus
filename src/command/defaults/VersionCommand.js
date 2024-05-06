@@ -7,6 +7,7 @@ import { versions } from "process";
 import { VersionInfo } from "../../VersionInfo.js";
 import { Translatable } from "../../lang/Translatable.js";
 import { TranslationKeys } from "../../lang/TranslationKeys.js";
+import { PluginBase } from "../../plugin/PluginBase.js";
 
 export class VersionCommand extends Command {
 
@@ -25,14 +26,28 @@ export class VersionCommand extends Command {
      * @param {Object|undefined} args
      */
     execute(sender, interaction, args) {
-        const discordNexusVersion = VersionInfo.VERSION;
-        const nodeJSVersion = versions.node;
-        const platformName = platform;
-        
-        sender.reply(
-            `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_VERSION_INFO, [TextFormat.format(`v${discordNexusVersion}`, TextFormat.colors.green)]))}\n` +
-            `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_NODE_INFO, [TextFormat.format(nodeJSVersion, TextFormat.colors.green)]))}\n` +
-            `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_PLATFORM_INFO, [TextFormat.format(platformName, TextFormat.colors.green)]))}`
-        )
+        if (args.length == 0) {
+            const discordNexusVersion = VersionInfo.VERSION;
+            const nodeJSVersion = versions.node;
+            const platformName = platform;
+            
+            sender.reply(
+                `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_VERSION_INFO, [TextFormat.format(`v${discordNexusVersion}`, TextFormat.colors.green)]))}\n` +
+                `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_NODE_INFO, [TextFormat.format(nodeJSVersion, TextFormat.colors.green)]))}\n` +
+                `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_PLATFORM_INFO, [TextFormat.format(platformName, TextFormat.colors.green)]))}`
+            )
+        } else {
+            const pluginName = args.join(" ");
+            const plugin = this.getNexus().getPluginManager().getPlugin(pluginName);
+            if (plugin instanceof PluginBase) {
+                const desc = plugin.getDescription();
+                sender.reply(
+                    `${TextFormat.format(`${desc.getName()} v${desc.getVersion()}`, TextFormat.colors.green)}\n` +
+                    `Author: ${TextFormat.format(`${desc.getAuthor()}`, TextFormat.colors.green)}`
+                );
+            } else {
+                sender.reply(this.getNexus().getLanguage().get(TranslationKeys.NEXUS_PLUGIN_NOSUCH));
+            }
+        }
     }
 }

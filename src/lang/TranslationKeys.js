@@ -23,5 +23,6 @@ export const TranslationKeys = {
     NEXUS_START_CRON_INFO: "nexus.start.cron-info",
     NEXUS_VERSION_INFO: "nexus.version.info",
     NEXUS_NODE_INFO: "nexus.node.info",
-    NEXUS_PLATFORM_INFO: "nexus.platform.info"
+    NEXUS_PLATFORM_INFO: "nexus.platform.info",
+    NEXUS_PLUGIN_NOSUCH: "nexus.plugin.noSuch"
 };
