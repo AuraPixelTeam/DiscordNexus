@@ -79,8 +79,9 @@ export class TaskHandler {
                 } catch(error) {
                     if (error instanceof CancelTaskException) {
                         this.cancel();
+                    } else {
+                        throw error;
                     }
-                    throw error;
                 } 
             }, this.getDelay());
         }
@@ -91,8 +92,9 @@ export class TaskHandler {
                 } catch(error) {
                     if (error instanceof CancelTaskException) {
                         this.cancel();
+                    } else {
+                        throw error;
                     }
-                    throw error;
                 } 
             }, this.getDelay());
         }
