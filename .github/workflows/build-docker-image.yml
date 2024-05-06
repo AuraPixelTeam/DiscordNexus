@@ -33,7 +33,6 @@ jobs:
         uses: docker/build-push-action@v5.3.0
         with:
           push: true
-          context: .
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/discordnexus:${{ github.ref_name }}
-            ghcr.io/${{ secrets.DOCKERHUB_USERNAME }}/discordnexus:${{ github.ref_name }}
+            dnexusjs/discordnexus:${{ github.ref_name }}
+            ghcr.io/dnexusjs/discordnexus:${{ github.ref_name }}
