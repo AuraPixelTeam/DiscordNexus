@@ -1,4 +1,4 @@
-import { memoryUsage } from "process";
+import { cpuUsage, hrtime, memoryUsage } from "process";
 import v8 from "v8";
 
 export class Process {
@@ -27,7 +27,20 @@ export class Process {
         return memoryUsage().heapUsed;
     }
 
+    static getMemoryUsagePercent() {
+        const memoryUsage = this.getMemoryUsage();
+        const totalMemory = os.totalmem();
+        return (memoryUsage / totalMemory) * 100;
+    }
+
     static setMemoryLimit(memory) {
         v8.setFlagsFromString(`--max-old-space-size=${memory}`);
+    }
+
+    /**
+     * @returns {number}
+     */
+    static getCpuUsage() {
+        return cpuUsage();
     }
 }

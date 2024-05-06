@@ -22,6 +22,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MemoryManager } from "./MemoryManager.js";
 import { TextFormat } from "./utils/TextFormat.js";
+import { CLI } from "./utils/CLI.js";
 
 global.LANGUAGE_PATH = "./src/lang/defaults";
 
@@ -47,6 +48,8 @@ export class DiscordNexus extends Client {
         super(options);
         
         configDotenv()
+
+        CLI.setTerminalTitle(`${VersionInfo.NAME} ${VersionInfo.VERSION}`)
 
         const currentFilePath = fileURLToPath(import.meta.url);
         const currentDirPath = dirname(currentFilePath);
