@@ -1,4 +1,4 @@
 memory:
-    # The minimum memory in megabytes will be warned on the console, set to 0 to turn it off
-    warning-limit: 1024
+    # The maximum memory in megabytes, set to 0 to turn it off
+    limit: 0
     

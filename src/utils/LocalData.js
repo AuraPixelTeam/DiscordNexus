@@ -11,6 +11,7 @@ export class LocalData {
     file;
     type;
     data;
+    nestedCache = [];
 
     constructor(file, type, defaultValue = {}) {
         this.file = file;
@@ -45,6 +46,55 @@ export class LocalData {
 
     getAll() {
         return this.data;
+    }
+
+    getNested(key, defaultValue = null) {
+        if (this.nestedCache[key]) {
+            return this.nestedCache[key];
+        }
+    
+        const vars = key.split(".");
+        let base = vars.shift();
+    
+        if (this.data[base] !== undefined) {
+            base = this.data[base];
+        } else {
+            return defaultValue;
+        }
+    
+        while (vars.length > 0) {
+            const baseKey = vars.shift();
+            if (base[baseKey] !== undefined) {
+                base = base[baseKey];
+            } else {
+                return defaultValue;
+            }
+        }
+    
+        this.nestedCache[key] = base;
+        return base;
+    }
+    
+    setNested(key, value) {
+        const vars = key.split(".");
+        let base = vars.shift();
+    
+        if (!this.data[base]) {
+            this.data[base] = {};
+        }
+    
+        base = this.data[base];
+    
+        while (vars.length > 0) {
+            const baseKey = vars.shift();
+            if (!base[baseKey]) {
+                base[baseKey] = {};
+            }
+            base = base[baseKey];
+        }
+    
+        base = value;
+        this.nestedCache = {};
     }
 
     save = () => {

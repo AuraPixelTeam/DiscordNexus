@@ -20,6 +20,7 @@ import { CommandMap } from "./command/CommandMap.js";
 import { Language } from "./lang/Language.js";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { MemoryManager } from "./MemoryManager.js";
 
 global.LANGUAGE_PATH = "./src/lang/defaults";
 
@@ -31,6 +32,7 @@ export class DiscordNexus extends Client {
     nexusProperties;
     language;
     commandMap;
+    memoryManager;
 
     constructor() {
         const options = {
@@ -53,6 +55,14 @@ export class DiscordNexus extends Client {
         this.commandMap = new CommandMap(this);
         this.start().then((OK) => {
             if (!OK) return this.shutdown();
+
+            const DiscordNexusJSON = "nexus.yml";
+            if (!existsSync(DiscordNexusJSON)) {
+                const content = readFileSync(path.join(this.getDataPath(), "src", "resources", "nexus.yml"), 'utf-8');
+                writeFileSync(DiscordNexusJSON, content);
+            }
+            this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
+            this.memoryManager = new MemoryManager(this);
             
             this.getBaseConsole().info(this.language.get(TranslationKeys.NEXUS_LOADING_CONFIGURATION));
 
@@ -71,13 +81,6 @@ export class DiscordNexus extends Client {
                     });
                     console.log(`Logged as ${this.user.username}`)
                 })
-
-            const DiscordNexusJSON = "nexus.yml";
-            if (!existsSync(DiscordNexusJSON)) {
-                const content = readFileSync(path.join(this.getDataPath(), "src", "resources", "nexus.yml"), 'utf-8');
-                writeFileSync(DiscordNexusJSON, content);
-            }
-            this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
     
             const pluginsPath = "plugins";
             const pluginDataPath = "plugin_data"
@@ -147,6 +150,13 @@ export class DiscordNexus extends Client {
      */
     getCommandMap() {
         return this.commandMap;
+    }
+
+    /**
+     * @returns {MemoryManager}
+     */
+    getMemoryManager() {
+        return this.memoryManager;
     }
 
     start = async () => {
