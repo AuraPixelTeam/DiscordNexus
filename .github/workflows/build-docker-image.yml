@@ -21,10 +21,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-          
-      - name: Get name of Docker repository name
-        id: docker-repo-name
-        run: echo NAME=$(echo "${GITHUB_REPOSITORY,,}") >> $GITHUB_OUTPUT
         
       -
         name: Login to GitHub Container Registry
@@ -40,5 +36,5 @@ jobs:
           push: true
           context: .
           tags: |
-              harryitz/discordnexus:latest
-              ghcr.io/${{ steps.docker-repo-name.outputs.NAME }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/discordnexus:${{ github.ref_name }}
+            ghcr.io/dnexusjs/discordnexus:lastest
