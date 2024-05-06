@@ -21,6 +21,7 @@ import { Language } from "./lang/Language.js";
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import { MemoryManager } from "./MemoryManager.js";
+import { TextFormat } from "./utils/TextFormat.js";
 
 global.LANGUAGE_PATH = "./src/lang/defaults";
 
@@ -79,7 +80,11 @@ export class DiscordNexus extends Client {
                             }
                         }
                     });
-                    console.log(`Logged as ${this.user.username}`)
+                    console.log(
+                        this.getLanguage().translate(
+                            new Translatable(TranslationKeys.NEXUS_LOGIN_INFO, [TextFormat.format(this.user.username, TextFormat.colors.green)])
+                        )
+                    );
                 })
     
             const pluginsPath = "plugins";
