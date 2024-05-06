@@ -24,7 +24,6 @@ jobs:
           prerelease: false
           title: "DiscordNexus ${{ github.ref_name }}"
           files: |
-            SECURITY.md
             LICENSE
             start.cmd
             README.md
