@@ -30,9 +30,9 @@ export class VersionCommand extends Command {
         const platformName = platform;
         
         sender.reply(
-            `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_VERSION_INFO, [discordNexusVersion]))}\n` +
-            `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_NODE_INFO, [nodeJSVersion]))}\n` +
-            `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_PLATFORM_INFO, [platformName]))}`
+            `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_VERSION_INFO, [TextFormat.format(`v${discordNexusVersion}`, TextFormat.colors.green)]))}\n` +
+            `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_NODE_INFO, [TextFormat.format(nodeJSVersion, TextFormat.colors.green)]))}\n` +
+            `${this.getNexus().getLanguage().translate(new Translatable(TranslationKeys.NEXUS_PLATFORM_INFO, [TextFormat.format(platformName, TextFormat.colors.green)]))}`
         )
     }
 }
