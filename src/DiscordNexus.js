@@ -23,6 +23,7 @@ import { MemoryManager } from "./MemoryManager.js";
 import { TextFormat } from "./utils/TextFormat.js";
 import { CLI } from "./utils/CLI.js";
 import { Network } from "./network/Network.js";
+import { configure } from "crashreporter";
 
 global.LANGUAGE_PATH = "./src/lang/defaults";
 
@@ -190,6 +191,16 @@ export class DiscordNexus extends Client {
         if (this.getNexusProperties().get("cron-enable")) {
             this.network = new Network(this);
         }
+
+        const crashDumpsDir = "./crashdumps";
+        if (!existsSync(crashDumpsDir)) {
+            mkdirSync(crashDumpsDir);
+        }
+        configure({
+            outDir: crashDumpsDir,
+            exitOnCrash: true,
+            hiddenAttributes: ['execPath', 'argv', 'currentDirectory', 'env', 'pid', 'processTitle', 'versions', 'memoryUsage', 'requireCache', 'activeHandle', 'activeRequest']
+        })
         
         return true;
     }

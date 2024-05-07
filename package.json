@@ -12,6 +12,7 @@
   "author": "harryc47",
   "license": "GPL-3.0-only",
   "dependencies": {
+    "crashreporter": "^1.1.0",
     "discord.js": "^14.12.1",
     "dotenv": "^16.4.5",
     "events": "^3.3.0",
