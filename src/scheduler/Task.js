@@ -3,7 +3,6 @@ import { TaskHandler } from "./TaskHandler.js";
 export class Task {
     
     id = -1;
-    taskHandler;
 
     constructor() {}
 

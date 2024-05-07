@@ -47,6 +47,17 @@ export class CommandMap {
         this.knownCommands[commandName] = command;
     }
 
+    /**
+     * @param {Command} command 
+     */
+    unregister(command) {
+        Object.keys(this.knownCommands).forEach(key => {
+            if (this.knownCommands[key] === command) {
+              delete this.knownCommands[key];
+            }
+        });
+    }
+
     registerAllForClient() {
         const commands = Object.values(this.getCommands()).map(cmd => cmd.toJSON());
 
