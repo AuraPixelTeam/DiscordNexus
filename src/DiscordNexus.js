@@ -102,7 +102,6 @@ export class DiscordNexus extends Client {
             } else {
                 this.getPluginManager().loadPlugins(pluginsPath);
             }
-            this.getCommandMap().registerAllForClient();
             
             new ConsoleReader(this);
             if (VersionInfo.IS_DEVELOPMENT_BUILD) {

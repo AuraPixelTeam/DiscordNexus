@@ -31,31 +31,31 @@ export class PluginManager {
         }
     }
 
-    loadPlugins(pluginsPath) {
+    async loadPlugins(pluginsPath) {
         const plugins = readdirSync(pluginsPath);
         for (let dirName of plugins) {
             const pluginDirPath = `${pluginsPath}/${dirName}`;
             const loader = new pluginLoader(this.nexus, pluginDirPath);
             const language = this.nexus.getLanguage();
-            loader.load().then(() => {
-                const plugin = loader.getPlugin();
-                const pluginName = plugin.getDescription().getName();
-                const pluginVersion = plugin.getDescription().getVersion();
+            await loader.load()
+            const plugin = loader.getPlugin();
+            const pluginName = plugin.getDescription().getName();
+            const pluginVersion = plugin.getDescription().getVersion();
 
-                this.nexus
-                    .getBaseConsole()
-                    .info(
-                        language.translate(
-                            new Translatable(
-                                TranslationKeys.NEXUS_PLUGIN_ENABLING,
-                                [pluginName, pluginVersion]
-                            )
+            this.nexus
+                .getBaseConsole()
+                .info(
+                    language.translate(
+                        new Translatable(
+                            TranslationKeys.NEXUS_PLUGIN_ENABLING,
+                            [pluginName, pluginVersion]
                         )
-                    );
-                this.callEvent(new PluginEnableEvent(plugin));
-                this.install(plugin);
-            });
+                    )
+                );
+            this.callEvent(new PluginEnableEvent(plugin));
+            this.install(plugin);
         }
+        this.nexus.getCommandMap().registerAllForClient();
     }
 
     getPlugins() {
