@@ -42,7 +42,10 @@ export class PluginBase {
     }
 
     saveDefaultConfig() {
-        this.saveResource("config.yml");
+        const configYml = `${this.getDataPath()}/config.yml`;
+        if (!existsSync(configYml)) {
+            this.saveResource("config.yml");
+        }
     }
 
     saveResource(fileName) {
