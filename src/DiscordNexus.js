@@ -26,6 +26,7 @@ import { Network } from "./network/Network.js";
 import { configure } from "crashreporter";
 import { String } from "./utils/String.js";
 import { File } from "./utils/File.js";
+import { NexusConfigurationConstants } from "./NexusConfigurationConstants.js";
 
 global.LANGUAGE_PATH = "./src/lang/defaults";
 
@@ -71,6 +72,12 @@ export class DiscordNexus extends Client {
             }
             this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
             this.memoryManager = new MemoryManager(this);
+
+            if (this.getNexusConfig().getNested(NexusConfigurationConstants.SERVER_DEBUG)) {
+                this.on('debug', (info) => {
+                    this.getBaseConsole().debug(info);
+                })
+            }
             
             this.getBaseConsole().info(this.language.get(TranslationKeys.NEXUS_LOADING_CONFIGURATION));
 
@@ -223,7 +230,7 @@ export class DiscordNexus extends Client {
 
     shutdown() {
         this.getPluginManager().disablePlugins();
-        this.destroy();
+        // this.destroy();
         process.kill(process.pid, 'SIGINT');
     }
 }

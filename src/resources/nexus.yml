@@ -2,3 +2,5 @@ memory:
     # The maximum memory in megabytes, set to 0 to turn it off
     limit: 0
     
+server:
+    debug: false

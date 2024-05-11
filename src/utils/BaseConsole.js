@@ -14,6 +14,10 @@ export class BaseConsole {
         this.log("WARNING", TextFormat.format(text, TextFormat.colors.yellow));
     }
 
+    debug(text) {
+        this.log("DEBUG", TextFormat.format(text, TextFormat.colors.gray));
+    }
+
     log(type, text) {
         const now = new Date();
         const hours = String(now.getHours()).padStart(2, '0');
