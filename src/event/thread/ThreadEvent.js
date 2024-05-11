@@ -1,8 +1,8 @@
 import { ThreadChannel } from "discord.js";
-import { Events } from "../Events.js";
+import { Event } from "../Event.js";
 
 
-export class ThreadEvent extends Events {
+export class ThreadEvent extends Event {
 
     thread;
 
