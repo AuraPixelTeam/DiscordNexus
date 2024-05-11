@@ -9,7 +9,7 @@ export class ThreadDeleteEvent extends ThreadEvent {
      * 
      * @param {ThreadChannel} thread 
      */
-    constructor(thread, newlyCreated) {
+    constructor(thread) {
         super(Events.ThreadDelete, thread);
     }
 }
