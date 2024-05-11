@@ -24,6 +24,8 @@ import { TextFormat } from "./utils/TextFormat.js";
 import { CLI } from "./utils/CLI.js";
 import { Network } from "./network/Network.js";
 import { configure } from "crashreporter";
+import { String } from "./utils/String.js";
+import { File } from "./utils/File.js";
 
 global.LANGUAGE_PATH = "./src/lang/defaults";
 
@@ -59,7 +61,7 @@ export class DiscordNexus extends Client {
         this.baseConsole = new BaseConsole();
         this.pluginManager = new PluginManager(this);
         this.commandMap = new CommandMap(this);
-        this.start().then((OK) => {
+        this.start().then(async (OK) => {
             if (!OK) return this.shutdown();
 
             const DiscordNexusJSON = "nexus.yml";
@@ -71,6 +73,21 @@ export class DiscordNexus extends Client {
             this.memoryManager = new MemoryManager(this);
             
             this.getBaseConsole().info(this.language.get(TranslationKeys.NEXUS_LOADING_CONFIGURATION));
+
+            const defaultEvents = Object.keys(Events).map((a) => Events[a]);
+            for (const event of defaultEvents) {
+                const capitalizedEventName = String.capitalizeFirstLetter(event);
+                const eventName = `${capitalizedEventName}Event`;
+                const eventFile = `${eventName}.js`;
+                const eventFilePath = File.findFile(`./src/event`, eventFile);
+                if (eventFilePath) {
+                    const module = await import(`./event/${eventFilePath}`);
+                    this.on(event, (...args) => {
+                        const eventClass = new (module[eventName])(...args);
+                        this.getPluginManager().callEvent(eventClass);
+                    })
+                }
+            }
 
             this.login(process.env.CLIENT_TOKEN)
                 .then(() => {

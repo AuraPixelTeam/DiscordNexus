@@ -6,7 +6,7 @@ export class DataPacketReceiveEvent extends ServerEvent {
 
     packet;
     constructor(packet) {
-        super(Events.DATA_PACKET_RECEIVE_EVENT);
+        super(Events.DataPacketReceive);
         this.packet = packet;
     }
 
