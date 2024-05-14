@@ -8,6 +8,8 @@ import { PluginBase } from "../plugin/PluginBase.js";
 import { Translatable } from "../lang/Translatable.js";
 import { TranslationKeys } from "../lang/TranslationKeys.js";
 import { DiscordNexus } from "../DiscordNexus.js";
+import path from "path";
+import { Npm } from "../utils/Npm.js";
 
 export class pluginLoader {
 
@@ -54,7 +56,23 @@ export class pluginLoader {
                 }
                 break;
         }
-        
+
+        const installedPackages = await Npm.list(path.join(dataPath, ".."));
+        const requiredPackages = pluginInfo["requiredPackages"];
+        if (!requiredPackages.every(element => installedPackages.includes(element))) {
+            if (requiredPackages && typeof requiredPackages == 'object') {
+                try {
+                    this.nexus.getBaseConsole().info(`Downloading ${requiredPackages.length} packages for the ${pluginInfo["name"]}`);
+                    await Npm.install(requiredPackages, {
+                        cwd: dataPath,
+                        save: false
+                    });
+                    this.nexus.getBaseConsole().info(`Downloaded ${requiredPackages.length} packages for the ${pluginInfo["name"]} plugin including: ${requiredPackages.join(", ")}`);
+                } catch (e) {
+                    throw new Error(`Unable to uninstall package of ${pluginInfo["name"]} plugin`);
+                }
+            }
+        }
 
         const mainPath = `${this.file}/src/${pluginInfo["main"]}.js`;
         // TODO: clean path

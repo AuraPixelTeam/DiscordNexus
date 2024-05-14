@@ -95,7 +95,18 @@ export class DiscordNexus extends Client {
                     })
                 }
             }
-
+            
+            const pluginsPath = "plugins";
+            const pluginDataPath = "plugin_data"
+            if (!existsSync(pluginDataPath)) {
+                mkdirSync(pluginDataPath);
+            }
+            if (!existsSync(pluginsPath)) {
+                mkdirSync(pluginsPath);
+            } else {
+                await this.getPluginManager().loadPlugins(pluginsPath);
+            }
+            
             this.login(process.env.CLIENT_TOKEN)
                 .then(() => {
                     this.on(Events.InteractionCreate, async (interaction) => {
@@ -116,16 +127,6 @@ export class DiscordNexus extends Client {
                     );
                 })
     
-            const pluginsPath = "plugins";
-            const pluginDataPath = "plugin_data"
-            if (!existsSync(pluginDataPath)) {
-                mkdirSync(pluginDataPath);
-            }
-            if (!existsSync(pluginsPath)) {
-                mkdirSync(pluginsPath);
-            } else {
-                this.getPluginManager().loadPlugins(pluginsPath);
-            }
             
             new ConsoleReader(this);
             if (VersionInfo.IS_DEVELOPMENT_BUILD) {
