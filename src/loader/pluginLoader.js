@@ -58,7 +58,7 @@ export class pluginLoader {
         }
 
         const installedPackages = await Npm.list(path.join(dataPath, ".."));
-        const requiredPackages = pluginInfo["requiredPackages"];
+        const requiredPackages = pluginInfo["requiredPackages"] ?? [];
         if (!requiredPackages.every(element => installedPackages.includes(element))) {
             if (requiredPackages && typeof requiredPackages == 'object') {
                 try {
