@@ -67,7 +67,7 @@ export class DiscordNexus extends Client {
 
             const DiscordNexusJSON = "nexus.yml";
             if (!existsSync(DiscordNexusJSON)) {
-                const content = readFileSync(path.join(this.getDataPath(), "src", "resources", "nexus.yml"), 'utf-8');
+                const content = readFileSync(path.join(this.getDataPath(), "resources", "nexus.yml"), 'utf-8');
                 writeFileSync(DiscordNexusJSON, content);
             }
             this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
