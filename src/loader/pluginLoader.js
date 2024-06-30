@@ -10,6 +10,7 @@ import { TranslationKeys } from "../lang/TranslationKeys.js";
 import { DiscordNexus } from "../DiscordNexus.js";
 import path from "path";
 import { Npm } from "../utils/Npm.js";
+import { Version } from "../utils/Version.js";
 
 export class pluginLoader {
 
@@ -46,12 +47,12 @@ export class pluginLoader {
 
         switch(typeof pluginInfo["api"]) {
             case 'string':
-                if (pluginInfo["api"] !== VersionInfo.VERSION) {
+                if (Version.compareVersions(pluginInfo["api"], VersionInfo.VERSION) != '=') {
                     throw new Error(language.translate(new Translatable(TranslationKeys.NEXUS_PLUGIN_API_ERROR, [pluginInfo["name"], VersionInfo.VERSION])));
                 }
                 break;
             case 'object':
-                if (!pluginInfo["api"].includes(VersionInfo.VERSION)) {
+                if (!pluginInfo["api"].some(version => Version.compareVersions(version, VersionInfo.VERSION) == "=")) {
                     throw new Error(language.translate(new Translatable(TranslationKeys.NEXUS_PLUGIN_API_ERROR, [pluginInfo["name"], VersionInfo.VERSION])));
                 }
                 break;
