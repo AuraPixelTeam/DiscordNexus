@@ -32,6 +32,9 @@ export class LocalData {
                 case LocalDataTypes.YAML:
                     this.data = parse(content);
                     break;
+                case LocalDataTypes.TXT:
+                    this.data = readFileSync(file, 'utf-8').split("\n")
+                    break;
             }
         }
     }
@@ -109,6 +112,9 @@ export class LocalData {
             case LocalDataTypes.YAML:
                 content = stringify(this.data);
                 break;
+            case LocalDataTypes.TXT:
+                content = this.data.join("\n")
+                break;
         }
         writeFileSync(this.file, content)
     }
@@ -117,5 +123,6 @@ export class LocalData {
 export const LocalDataTypes = {
     PROPERTIES: 0,
     JSON: 1,
-    YAML: 2
+    YAML: 2,
+    TXT
 }
