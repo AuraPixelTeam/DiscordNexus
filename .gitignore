@@ -4,3 +4,4 @@ nexus.properties
 nexus.yml
 plugins
 plugin_data
+administrators.txt

@@ -36,6 +36,7 @@ export class DiscordNexus extends Client {
     configuration;
     pluginManager;
     nexusProperties;
+    administrators;
     language;
     commandMap;
     memoryManager;
@@ -72,6 +73,12 @@ export class DiscordNexus extends Client {
             }
             this.configuration = new LocalData(DiscordNexusJSON, LocalDataTypes.YAML);
             this.memoryManager = new MemoryManager(this);
+
+            const AdministratorsTxt = "administrators.txt"
+            if (!existsSync(AdministratorsTxt)) {
+                writeFileSync(AdministratorsTxt, "");
+            }
+            this.administrators = new LocalData(AdministratorsTxt, LocalDataTypes.TXT);
 
             if (this.getNexusConfig().getNested(NexusConfigurationConstants.SERVER_DEBUG)) {
                 this.on('debug', (info) => {
@@ -138,6 +145,23 @@ export class DiscordNexus extends Client {
             this.shutdown();
             process.exit();
         });
+    }
+
+    isAdministrator(userId) {
+        return this.administrators.getAll().includes(userId)
+    }
+
+    addAdministrator(userId) {
+        const list = this.administrators.getAll()
+        list.push(userId)
+        this.administrators.setAll(list)
+        this.administrators.save()
+    }
+
+    removeAdministrator(userId) {
+        const list = this.administrators.getAll()
+        this.administrators.setAll(list.filter(user_id => user_id != userId))
+        this.administrators.save()
     }
 
     getDataPath() {

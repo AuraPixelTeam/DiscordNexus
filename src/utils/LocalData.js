@@ -51,6 +51,10 @@ export class LocalData {
         return this.data;
     }
 
+    setAll(data) {
+        this.data = data
+    }
+
     getNested(key, defaultValue = null) {
         if (this.nestedCache[key]) {
             return this.nestedCache[key];
@@ -124,5 +128,5 @@ export const LocalDataTypes = {
     PROPERTIES: 0,
     JSON: 1,
     YAML: 2,
-    TXT
+    TXT: 3
 }
