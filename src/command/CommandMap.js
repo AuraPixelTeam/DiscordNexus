@@ -3,6 +3,8 @@ import { Command } from "./Command.js";
 import { StopCommand } from "./defaults/StopCommand.js";
 import { PluginsCommand } from "./defaults/PluginsCommand.js";
 import { VersionCommand } from "./defaults/VersionCommand.js";
+import { AddAdministratorCommand } from "./defaults/addAdministratorCommand.js";
+import { RemoveAdministratorCommand } from "./defaults/RemoveAdministratorCommand.js";
 
 export class CommandMap {
 
@@ -18,7 +20,9 @@ export class CommandMap {
         this.registerAll([
             new StopCommand(),
             new PluginsCommand(),
-            new VersionCommand()
+            new VersionCommand(),
+            new AddAdministratorCommand(),
+            new RemoveAdministratorCommand()
         ])
     }
 
