@@ -25,5 +25,6 @@ export const TranslationKeys = {
     NEXUS_NODE_INFO: "nexus.node.info",
     NEXUS_PLATFORM_INFO: "nexus.platform.info",
     NEXUS_PLUGIN_NOSUCH: "nexus.plugin.noSuch",
-    NEXUS_LOGIN_INFO: "nexus.logged.info"
+    NEXUS_LOGIN_INFO: "nexus.logged.info",
+    COMMAND_NOT_ADMINISTRATOR: "nexus.command.not.administrator"
 };

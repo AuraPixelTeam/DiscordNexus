@@ -16,6 +16,7 @@ export class AddAdministratorCommand extends Command {
                     .setRequired(true)
                 )
         )
+        this.setAdministrator(true)
     }
 
     /**
@@ -31,14 +32,8 @@ export class AddAdministratorCommand extends Command {
 
         const target = args.getUser("user")
         const targetId = target.id
-        const userId = sender.id
         
-        if (this.getNexus().isAdministrator(userId)) {
-            if (!this.getNexus().isAdministrator(targetId)) this.getNexus().addAdministrator(targetId)
-                
-            interaction.reply(`Added ${target} to administrator list!`);
-        } else {
-            interaction.reply("You don't have permission to do this!")
-        }
+        if (!this.getNexus().isAdministrator(targetId)) this.getNexus().addAdministrator(targetId)
+        interaction.reply(`Added ${target} to administrator list!`);
     }
 }

@@ -6,6 +6,7 @@ export class Command {
 
     data;
     nexus;
+    administrator;
 
     /**
      * @param {SlashCommandBuilder} options 
@@ -38,6 +39,13 @@ export class Command {
      */
     setNexus(nexus) {
         this.nexus = nexus;
+    }
+
+    /**
+     * @param {boolean} value 
+     */
+    setAdministrator(value = true) {
+        this.administrator = value
     }
 
     getName() {

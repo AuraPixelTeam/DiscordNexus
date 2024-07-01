@@ -122,6 +122,12 @@ export class DiscordNexus extends Client {
                 
                             if (command) {
                                 try {
+                                    if (command.administrator && !this.isAdministrator(interaction.user.id)) {
+                                        return await interaction.reply({
+                                            ephemeral: true,
+                                            content: this.language.get(TranslationKeys.COMMAND_NOT_ADMINISTRATOR)
+                                        })
+                                    }
                                     await command.execute(interaction.user, interaction, interaction.options);
                                 } catch (e) {}
                             }

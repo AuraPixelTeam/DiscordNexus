@@ -16,6 +16,7 @@ export class RemoveAdministratorCommand extends Command {
                     .setRequired(true)
                 )
         )
+        this.setAdministrator(true)
     }
 
     /**
@@ -31,13 +32,8 @@ export class RemoveAdministratorCommand extends Command {
 
         const target = args.getUser("user")
         const targetId = target.id
-        const userId = sender.id
-        
-        if (this.getNexus().isAdministrator(userId)) {
-            this.getNexus().removeAdministrator(targetId)
-            sender.reply(`Deleted ${target} from administrator list!`);
-        } else {
-            sender.reply("You don't have permission to do this!")
-        }
+
+        this.getNexus().removeAdministrator(targetId)
+        sender.reply(`Deleted ${target} from administrator list!`);
     }
 }
