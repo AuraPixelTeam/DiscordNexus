@@ -25,7 +25,9 @@ export class Command {
      * @param {BaseInteraction|undefined} interaction
      * @param {Object|undefined} args
      */
-    async execute(sender, interaction, args) {}
+    async execute(sender, interaction, args) {
+        throw new Error("Function execute() is not added")
+    }
 
     /**
      * @param {BaseInteraction|undefined} interaction
