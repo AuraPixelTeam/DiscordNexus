@@ -4,16 +4,16 @@
 		<a href="https://github.com/DiscordNexusJS/DiscordNexus"><img src="./assets/img/banner.png" width="546" alt="discord.js" /></a>
 	</p>
 	<br />
-	<p><a href="https://github.com/dnexusjs/DiscordNexus"><img src="https://github.com/dnexusjs/DiscordNexus/actions/workflows/build-docker-image.yml/badge.svg" alt="CI" /></a>
+	<p><a href="https://github.com/AuraTeamAZ/DiscordNexus"><img src="https://github.com/AuraTeamAZ/DiscordNexus/actions/workflows/build-docker-image.yml/badge.svg" alt="CI" /></a>
 		<a href="https://discord.gg/6ayTMsaEsa"><img src="https://img.shields.io/discord/1241921327720431626?color=5865F2&logo=discord&logoColor=white" alt="Discord server" /></a>
-		<a href="https://github.com/dnexusjs/DiscordNexus/releases"><img alt="Github total downloads" src="https://img.shields.io/github/downloads/dnexusjs/DiscordNexus/total?label=downloads%40total"></a>
-		<a href="https://img.shields.io/github/issues/Naereen/StrapDown.js.svg"><img alt="Github issues" src="https://img.shields.io/github/issues/dnexusjs/DiscordNexus.svg"></a>
+		<a href="https://github.com/AuraTeamAZ/DiscordNexus/releases"><img alt="Github total downloads" src="https://img.shields.io/github/downloads/AuraTeamAZ/DiscordNexus/total?label=downloads%40total"></a>
+		<a href="https://img.shields.io/github/issues/Naereen/StrapDown.js.svg"><img alt="Github issues" src="https://img.shields.io/github/issues/AuraTeamAZ/DiscordNexus.svg"></a>
 		<a href="https://https://docker.com/"><img alt="Docker" src="https://badgen.net/badge/icon/docker?icon=docker&label"></a>
 	</p>
 </div>
 
 ## Stargazers over time
-[![Stargazers over time](https://starchart.cc/dnexusjs/DiscordNexus.svg?variant=adaptive)](https://starchart.cc/dnexusjs/DiscordNexus)
+[![Stargazers over time](https://starchart.cc/AuraTeamAZ/DiscordNexus.svg?variant=adaptive)](https://starchart.cc/AuraTeamAZ/DiscordNexus)
 
 ## DiscordNexus
 This is a software for Discord.js bot with highly customisable
@@ -43,4 +43,4 @@ Thanks for your support!
 [JetBrains](https://www.jetbrains.com/), creators of the IntelliJ IDEA, supports Paper with one of their [Open Source Licenses](https://www.jetbrains.com/opensource/). IntelliJ IDEA is the recommended IDE for working with Paper, and most of the Paper team uses it.
 
 ## License
-Licensed under the [GNU General Public License v3.0](https://github.com/dnexusjs/DiscordNexus/blob/master/LICENSE) license.
+Licensed under the [GNU General Public License v3.0](https://github.com/AuraTeamAZ/DiscordNexus/blob/master/LICENSE) license.
