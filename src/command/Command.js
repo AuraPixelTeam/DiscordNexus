@@ -28,6 +28,11 @@ export class Command {
     async execute(sender, interaction, args) {}
 
     /**
+     * @param {BaseInteraction|undefined} interaction
+     */
+    async autoComplete(interaction) {}
+
+    /**
      * @returns {DiscordNexus}
      */
     getNexus() {

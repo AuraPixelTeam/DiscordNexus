@@ -128,6 +128,11 @@ export class DiscordNexus extends Client {
                                             content: this.language.get(TranslationKeys.COMMAND_NOT_ADMINISTRATOR)
                                         })
                                     }
+                                    if (interaction.isAutocomplete()) {
+                                        if (command) {
+                                            await command.autoComplete(interaction);
+                                        }
+                                    }
                                     await command.execute(interaction.user, interaction, interaction.options);
                                 } catch (e) {}
                             }
