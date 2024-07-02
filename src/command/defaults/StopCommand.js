@@ -10,6 +10,7 @@ export class StopCommand extends Command {
             .setName("stop")
             .setDescription("Stop DiscordNexus")
         )
+        this.setOnlyConsole(true)
     }
 
     /**

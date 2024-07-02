@@ -11,6 +11,7 @@ export class PluginsCommand extends Command {
             .setName("plugins")
             .setDescription("Plugins DiscordNexus")
         )
+        this.setOnlyConsole(true)
     }
 
     /**

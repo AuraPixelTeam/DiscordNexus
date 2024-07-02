@@ -63,7 +63,9 @@ export class CommandMap {
     }
 
     registerAllForClient() {
-        const commands = Object.values(this.getCommands()).map(cmd => cmd.toJSON());
+        const commands = Object.values(this.getCommands())
+            .filter(cmd => !cmd.isConsoleCommand)
+            .map(cmd => cmd.toJSON());
 
         try {
             const rest = new REST({version: '10'}).setToken(process.env.CLIENT_TOKEN);

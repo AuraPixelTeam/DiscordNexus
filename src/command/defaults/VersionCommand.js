@@ -17,6 +17,7 @@ export class VersionCommand extends Command {
             .setName("version")
             .setDescription("Get Info of DiscordNexus")
         )
+        this.setOnlyConsole(true)
     }
 
     /**

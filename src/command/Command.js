@@ -7,6 +7,7 @@ export class Command {
     data;
     nexus;
     administrator;
+    isConsoleCommand;
 
     /**
      * @param {SlashCommandBuilder} options 
@@ -53,6 +54,10 @@ export class Command {
      */
     setAdministrator(value = true) {
         this.administrator = value
+    }
+
+    setOnlyConsole(value = true) {
+        this.isConsoleCommand = value
     }
 
     getName() {
